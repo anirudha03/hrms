@@ -1,0 +1,211 @@
+import React, { useState } from 'react';
+
+export default function AddEmployee() {
+  const [formData, setFormData] = useState({
+    empid: '',
+    fname: '',
+    mname: '',
+    lname: '',
+    email: '',
+    phone: '',
+    aadhar: '',
+    dob: '',
+    address: '',
+    home: '',
+    bloodgroup: '',
+    gender: 'Male', // Default value set to 'Male'
+    mstatus: 'Single', // Default value set to 'Single'
+    degree: '',
+    post: '',
+    department: '',
+    bsalary: 51000, // Default value set to 51000
+    status: 'Active', // Default value set to 'Active'
+    doj: '',
+    passport: '',
+    bonus_date: '',
+    leave_balance: 0, // Default value set to 0
+    oneyear: '0', // Default value set to '0' as a string
+    password: '',
+    pancard: '',
+    accno: '',
+    bank_name: '',
+    ifsc: '',
+    branch: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/crud/add', formData);
+      console.log('Employee added successfully:', response.data);
+      // You can perform further actions here, such as displaying a success message or redirecting to another page
+    } catch (error) {
+      console.error('Error adding employee:', error);
+      // You can handle errors here, such as displaying an error message to the user
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="empid">Employee ID:</label>
+          <input type="text" name="empid" id="empid" value={formData.empid} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="fname">First Name:</label>
+          <input type="text" name="fname" id="fname" value={formData.fname} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="mname">Middle Name:</label>
+          <input type="text" name="mname" id="mname" value={formData.mname} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="lname">Last Name:</label>
+          <input type="text" name="lname" id="lname" value={formData.lname} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="phone">Phone:</label>
+          <input type="tel" name="phone" id="phone" value={formData.phone} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="aadhar">Aadhar:</label>
+          <input type="text" name="aadhar" id="aadhar" value={formData.aadhar} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="dob">Date of Birth:</label>
+          <input type="date" name="dob" id="dob" value={formData.dob} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="address">Address:</label>
+          <input type="text" name="address" id="address" value={formData.address} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="home">Home Address:</label>
+          <input type="text" name="home" id="home" value={formData.home} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="bloodgroup">Blood Group:</label>
+          <input type="text" name="bloodgroup" id="bloodgroup" value={formData.bloodgroup} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="gender">Gender:</label>
+          <select name="gender" id="gender" value={formData.gender} onChange={handleChange}>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="mstatus">Marital Status:</label>
+          <select name="mstatus" id="mstatus" value={formData.mstatus} onChange={handleChange}>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="degree">Degree:</label>
+          <input type="text" name="degree" id="degree" value={formData.degree} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="post">Post:</label>
+          <input type="text" name="post" id="post" value={formData.post} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="department">Department:</label>
+          <input type="text" name="department" id="department" value={formData.department} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="bsalary">Basic Salary:</label>
+          <input type="number" name="bsalary" id="bsalary" value={formData.bsalary} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="status">Status:</label>
+          <select name="status" id="status" value={formData.status} onChange={handleChange}>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Resigned">Resigned</option>
+            </select>
+        </div>
+        <div>
+          <label htmlFor="doj">Date of Joining:</label>
+          <input type="date" name="doj" id="doj" value={formData.doj} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="passport">Passport:</label>
+          <input type="text" name="passport" id="passport" value={formData.passport} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="bonus_date">Bonus Date:</label>
+          <input type="date" name="bonus_date" id="bonus_date" value={formData.bonus_date} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="leave_balance">Leave Balance:</label>
+          <input type="number" name="leave_balance" id="leave_balance" value={formData.leave_balance} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="oneyear">One Year:</label>
+          <input type="text" name="oneyear" id="oneyear" value={formData.oneyear} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="pancard">PAN Card:</label>
+          <input type="text" name="pancard" id="pancard" value={formData.pancard} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="accno">Account Number:</label>
+          <input type="text" name="accno" id="accno" value={formData.accno} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="bank_name">Bank Name:</label>
+          <input type="text" name="bank_name" id="bank_name" value={formData.bank_name} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="ifsc">IFSC Code:</label>
+          <input type="text" name="ifsc" id="ifsc" value={formData.ifsc} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="branch">Branch:</label>
+          <input type="text" name="branch" id="branch" value={formData.branch} onChange={handleChange} />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
+
+
+empRef: "",
+    month: "",
+    ename: "",
+    des: "",
+    djoin: "",
+    bsal: 0,
+    hra: 0,
+    ta: 0,
+    sa: 0,
+    ma: 0,
+    lta: 0,
+    totearn: 0,
+    ptax: 0,
+    pfemper: 0,
+    pfempes: 0,
+    totded: 0,
+    totsal: 0,
+    al: 0,
+    lt: 0,
+    td: 0,
+    bl: 0,
+    doi: "",
+    against_balance:0,
