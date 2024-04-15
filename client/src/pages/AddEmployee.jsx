@@ -36,6 +36,12 @@ export default function AddEmployee() {
     ifsc: "",
     branch: "",
     holder_name:"",
+    hra:0,
+    lta:0,
+    ta:0,
+    ma:0,
+    sa:0,
+    pfempes:0,    
   });
 
   const [error, setError] = useState(false);
@@ -108,6 +114,8 @@ export default function AddEmployee() {
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
+      }else{
+        alert("employee successfully added")
       }
       navigate(`/home`);
     }
@@ -115,7 +123,7 @@ export default function AddEmployee() {
         setError(error.message);
         setLoading(false);
     }
-    // console.log(formData);
+    console.log(formData);
   };
 
   return (
@@ -208,6 +216,20 @@ export default function AddEmployee() {
             <input type="text" id="ifsc" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ifsc}/>    
             Account Holder Name:
             <input type="text" id="holder_name" className="border p-1 rounded-sm" onChange={handleChange} value={formData.holder_name}/>    
+
+
+            house and rental allowance:
+            <input type="number" id="hra" className="border p-1 rounded-sm" onChange={handleChange} value={formData.hra} />
+            Travel Alowance:
+            <input type="number" id="ta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ta} />
+            Special Alowance:
+            <input type="number" id="sa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.sa} />
+            Medical Alowance:
+            <input type="number" id="ma" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ma} />
+            Leave Travel Alowance:
+            <input type="number" id="lta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lta} />
+            PF Employee:
+            <input type="number" id="pfempes" className="border p-1 rounded-sm" onChange={handleChange} value={formData.pfempes} />      
         </div>
         </form>
         <div className="flex justify-center ">

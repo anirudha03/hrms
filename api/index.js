@@ -3,12 +3,15 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
 import path from "path"
+import bodyParser from "body-parser"
+import cron from 'node-cron';
 
 import adminAuthRouter from './routes/adminAuth.route.js'; //for admin
 import employeeAuthRouter from './routes/employeeAuth.route.js'; //for employee
 import crudRouter from './routes/crud.route.js'; //for CRUD operations
 import leaveRouter from './routes/leave.route.js'; //for leave operations
 import slipRouter from './routes/slip.route.js'; //for salary slip operations
+import { autobonus } from "./utils/autoBonus.js";
 
 dotenv.config();
 const __dirname = path.resolve();
@@ -16,6 +19,8 @@ const __dirname = path.resolve();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
+
 
 mongoose.connect(process.env.MONGO).then(async () => {
     console.log("Connected to the database");
@@ -60,6 +65,7 @@ app.use((err, req, res, next) => { // Error handling middleware
     });
 });
 
-//employees: 728*40
-//admin: 201
-//bank: 188*40
+cron.schedule('0 0 */24 * * *', () => {
+    autobonus();
+});
+

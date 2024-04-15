@@ -16,12 +16,13 @@ export default function ViewAllLeaves() {
       try {
         const response = await fetch('/api/leave/get-leaves');
         const data = await response.json();
-        setLeaves(data);
+        // Sort leaves in descending order based on _id
+        const sortedLeaves = data.sort((a, b) => b._id.localeCompare(a._id));
+        setLeaves(sortedLeaves);
       } catch (error) {
         console.error('Error fetching leaves:', error);
       }
     };
-
     fetchLeaves();
   }, []);
 

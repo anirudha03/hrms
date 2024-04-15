@@ -24,6 +24,8 @@ import SearchSlip from "./pages/SearchSlip";
 import GetSlip from "./pages/GetSlip";
 import MayBeShow from "./components/MayBeShow";
 import EmpHomeContent from "./empPages/EmpHomeContent";
+import ViewDetails from "./empPages/ViewDetails";
+import HomeContent from "./pages/HomeContent";
 
 export default function App() {
   
@@ -44,6 +46,7 @@ export default function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/Profile" element={<Profile />} />
             <Route path="home" element={<Home />}>
+              <Route path="" element={<HomeContent />} />
               <Route path="add-employee" element={<AddEmployee />} />
               <Route path="generate-slip" element={<GenerateSlip />} />
               <Route path="update-employee" element={<UpdateEmployee />} />
@@ -61,9 +64,10 @@ export default function App() {
           <Route path="/employee-signin" element={<EmpSignIn/>}></Route>
           <Route element={<PrivateRouteEmp />}>
             <Route path="employee-home" element ={<EmpHome/>}>
-              <Route path="request-leave" element ={<RequestLeave/>}/>
               <Route path="" element ={<EmpHomeContent/>}/>
+              <Route path="request-leave" element ={<RequestLeave/>}/>
               <Route path="view-leave/:id" element ={<ViewLeave/>}/>
+              <Route path="view-details/:empid" element ={<ViewDetails/>}/>
             </Route>
           </Route>
         </Routes>

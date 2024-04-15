@@ -5,11 +5,22 @@ import Leave from '../models/leave.model.js';
 
 export const addSlip = async (req, res) => {
     const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, doi } = req.body;
-
+    
     const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, doi });
 
     try {
         const savedSlip = await newSlip.save();
+        
+        const employee = await Employee.findOne({ empid: empRef });
+        if (employee) {
+            const updatedLeaveBalance = employee.leave_balance + al; 
+            await Employee.updateOne({ empid: empRef }, { leave_balance: updatedLeaveBalance });
+            const { oneyear } = employee;
+            console.log("oneyear:", oneyear);
+        } else {
+            throw new Error('Employee not found');
+        }
+
         res.status(201).json(savedSlip); 
     } catch (error) {
         res.status(400).json({ message: error.message }); 
@@ -40,6 +51,17 @@ export const getSlips = async (req, res) => {
     }
 };
 
+export const getSlipsEmp = async (req, res) => {
+    const empid = req.params.empid; 
+    try {
+        const slips = await Slip.find({ empRef: empid });
+        // console.log(slips)
+        res.status(200).json(slips); 
+    } catch (error) {
+        res.status(500).json({ message: error.message }); 
+    }
+};
+
 export const updateSlip = async (req, res) => {
     try {
         const { empid, month } = req.params;
@@ -61,7 +83,19 @@ export const getEmpMonth = async (req, res) => {
     try {
         const { empid, month } = req.params;
 
-        // Retrieve employee information
+        const [year, monthStr] = month.split('-');
+        const monthNumber = parseInt(monthStr);
+
+        let prevMonthNumber = monthNumber - 1;
+        let prevYear = year;
+
+        if (prevMonthNumber === 0) {
+            prevMonthNumber = 12;
+            prevYear = parseInt(year) - 1;
+        }
+        const prevMonth = `${prevYear}-${prevMonthNumber.toString().padStart(2, '0')}`;
+
+        // console.log('Previous Month:', prevMonth);
         const employee = await Employee.findOne({ empid });
 
         if (!employee) {
@@ -69,7 +103,7 @@ export const getEmpMonth = async (req, res) => {
         }
 
         // Retrieve leaves for the specified month with status "approved"
-        const leaves = await Leave.find({ empRef: empid, month, status: "approved" });
+        const leaves = await Leave.find({ empRef: empid, month: prevMonth, status: "approved" });
 
         // Calculate total leave days for the month
         let totalDays = 0;
@@ -89,6 +123,13 @@ export const getEmpMonth = async (req, res) => {
             totalDays: totalDays,
             balance: employee.leave_balance,
             against_balance: leaves.against_balance,
+            hra:employee.hra,
+            lta:employee.lta,
+            ta:employee.ta,
+            ma:employee.ta,
+            sa:employee.sa,
+            pfempes:employee.pfempes,
+            bonus_date: employee.bonus_date,
         };
 
         res.json(result);

@@ -35,6 +35,12 @@ const employeeSchema = new Schema({
         type: String,
         default : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
     },
+    hra: { type: Number, default: null },
+    ta: { type: Number, default: null },
+    sa: { type: Number, default: null },
+    ma: { type: Number, default: null },
+    lta: { type: Number, default: null },
+    pfempes: { type: Number, default: null },
 }, {timestamps:true});
 
 const Employee = model('Employee', employeeSchema);

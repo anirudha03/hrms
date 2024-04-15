@@ -5,8 +5,7 @@ const { Schema, model } = mongoose;
 const bankDetailsSchema = new Schema({
     pancard: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     accno: {
         type: String,

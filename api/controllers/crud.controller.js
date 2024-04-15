@@ -1,5 +1,5 @@
-import Employee from "../models/employee.model.js"
-import BankDetails from "../models/bank.model.js"
+import Employee from "../models/employee.model.js";
+import BankDetails from "../models/bank.model.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
@@ -8,25 +8,43 @@ export const addEmployee = async (req, res, next) => {
     const {
       empid, fname, mname, lname, email, phone, aadhar, dob, address, home,
       bloodgroup, gender, mstatus, degree, post, department, bsalary, status,
-      doj, passport, bonus_date, leave_balance, oneyear, password,
+      doj, passport, bonus_date, leave_balance, oneyear, password, hra, lta, ma, sa, pfempes, ta,
+      pancard, accno, bank_name, ifsc, branch, holder_name
     } = req.body;
+
+    // Hash the password
     const hashedPassword = await bcryptjs.hash(password, 10);
+
+    // Create a new employee instance
     const employee = new Employee({
       empid, fname, mname, lname, email, phone, aadhar, dob, address, hometype: home,
       bloodgroup, gender, mstatus, degree, post, department, bsalary, status,
-      doj, passport, bonus_date, leave_balance, oneyear, password: hashedPassword,
+      doj, passport, bonus_date, leave_balance, oneyear, password: hashedPassword, hra, lta, ma, sa, pfempes, ta
     });
+
+    // Save the employee to the database
     await employee.save();
 
-    const { pancard, accno, bank_name, ifsc, branch, holder_name } = req.body;
+    // Check if the employee exists before saving bank details
+    const existingEmployee = await Employee.findOne({ empid });
+    if (!existingEmployee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Create a new bank details instance
     const bankDetails = new BankDetails({
       pancard, accno, bank_name, ifsc, branch, empRef: empid, holder_name,
     });
+
+    // Save the bank details to the database
     await bankDetails.save();
 
+    // Return success response
     return res.status(201).json({ employee, bankDetails });
   } catch (error) {
-    next(error);
+    // Handle errors
+    console.error('Error adding employee:', error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -75,6 +93,24 @@ export const getEmployees = async (req, res, next) => {
     res.status(200).json(employees);
   } catch (error) {
     next(error);
+  }
+};
+
+export const getEmails = async (req, res, next) => {
+  try {
+    const employees = await Employee.find({}, 'empid email department gender');
+
+    const emails = employees.map((employee) => ({
+      empid: employee.empid,
+      email: employee.email,
+      department: employee.department,
+      gender: employee.gender,
+    }));
+
+    res.json(emails);
+  } catch (error) {
+    console.error('Error fetching emails:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 

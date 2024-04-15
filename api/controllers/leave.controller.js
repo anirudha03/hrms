@@ -19,13 +19,17 @@ export const updateLeave = async (req, res, next) => {
         
         if (updatedLeave.status.toLowerCase() === "approved") {
             const employee = await Employee.findOne({ empid: updatedLeave.empRef });
-
             if (!employee) {
                 return next(errorHandler(404, 'Employee not found!'));
             }
-
             employee.leave_balance -= updatedLeave.days;
-
+            await employee.save();
+        } else if (updatedLeave.status.toLowerCase() === "rejected") {
+            const employee = await Employee.findOne({ empid: updatedLeave.empRef });
+            if (!employee) {
+                return next(errorHandler(404, 'Employee not found!'));
+            }
+            employee.leave_balance += updatedLeave.days; 
             await employee.save();
         }
 
@@ -36,6 +40,7 @@ export const updateLeave = async (req, res, next) => {
     }
 };
 
+
 export const getLeavesEmp = async (req, res, next) => {
     try {
         const empid = req.params.empid;
@@ -44,7 +49,7 @@ export const getLeavesEmp = async (req, res, next) => {
         if (!leaves) {
             return next(errorHandler(404, 'No leaves found for this employee ID!'));
         }
-
+        // console.log(leaves)
         return res.status(200).json(leaves);
     } catch (error) {
         next(error);

@@ -34,6 +34,12 @@ export default function UpdateEmployee() {
     bonus_date: "",
     leave_balance: "",
     password: "",
+    hra:0,
+    lta:0,
+    ta:0,
+    ma:0,
+    sa:0,
+    pfempes:0,
   });
 
   const handleSearchChange = (e) => {
@@ -216,6 +222,19 @@ export default function UpdateEmployee() {
               <input type="number" id="leave_balance" className="border p-1 rounded-sm" onChange={handleChange} value={formData.leave_balance} />
               Password:
               <input type="text" id="password" className="border p-1 rounded-sm" onChange={handleChange} value={formData.password} />   
+
+              house and rental allowance:
+              <input type="number" id="hra" className="border p-1 rounded-sm" onChange={handleChange} value={formData.hra} />
+              Travel Alowance:
+              <input type="number" id="ta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ta} />
+              Special Alowance:
+              <input type="number" id="sa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.sa} />
+              Medical Alowance:
+              <input type="number" id="ma" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ma} />
+              Leave Travel Alowance:
+              <input type="number" id="lta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lta} />
+              PF Employee:
+              <input type="number" id="pfempes" className="border p-1 rounded-sm" onChange={handleChange} value={formData.pfempes} />
           </div>
           </form>
           <div className="flex justify-center ">

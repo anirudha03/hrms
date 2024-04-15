@@ -34,6 +34,12 @@ export default function SearchEmployee() {
     bonus_date: "",
     leave_balance: "",
     password: "",
+    hra:0,
+    lta:0,
+    ta:0,
+    ma:0,
+    sa:0,
+    pfempes:0,
   });
   const [bankData, setBankData]= useState({
         pancard: "",
@@ -175,7 +181,21 @@ export default function SearchEmployee() {
             IFSC code:
             <input type="text" id="ifsc" className="border p-1 rounded-sm"  value={bankData.data? bankData.data.ifsc:''}/>   
             Account Holder Name:
-            <input type="text" id="holder_name" className="border p-1 rounded-sm"  value={bankData.data? bankData.data.holder_name:''}/>   
+            <input type="text" id="holder_name" className="border p-1 rounded-sm"  value={bankData.data? bankData.data.holder_name:''}/> 
+            <hr />
+            house and rental allowance:
+              <input type="number" id="hra" className="border p-1 rounded-sm" value={formData.hra} />
+              Travel Alowance:
+              <input type="number" id="ta" className="border p-1 rounded-sm" value={formData.ta} />
+              Special Alowance:
+              <input type="number" id="sa" className="border p-1 rounded-sm" value={formData.sa} />
+              Medical Alowance:
+              <input type="number" id="ma" className="border p-1 rounded-sm" value={formData.ma} />
+              Leave Travel Alowance:
+              <input type="number" id="lta" className="border p-1 rounded-sm" value={formData.lta} />
+              PF Employee:
+              <input type="number" id="pfempes" className="border p-1 rounded-sm" value={formData.pfempes} />
+          
           </div>
           </form>
           <div className="flex justify-center ">

@@ -9,7 +9,10 @@ const SearchSlip = () => {
   useEffect(() => {
     fetch('/api/slip/get-slip')
       .then(response => response.json())
-      .then(data => setSlips(data))
+      .then(data => {
+        const sortedSlips = data.sort((a, b) => new Date(b.doi) - new Date(a.doi));
+        setSlips(sortedSlips);
+      })
       .catch(error => console.error('Error fetching slips:', error));
   }, []);
 

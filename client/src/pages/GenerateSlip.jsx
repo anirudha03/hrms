@@ -33,11 +33,22 @@ export default function GenerateSlip() {
     bl: 0,
     doi: "",
     against_balance:0,
+    bonus_date:""
   });
 
   useEffect(() => {
-    console.log(data); // Log the updated state here
-  }, [data]);
+    console.log(data.bonus_date); // Log the updated state here
+    const today = new Date();
+    const bonusDate = new Date(data.bonus_date);
+
+    // Check if data.al is not already 2 and today's date is greater than or equal to the bonus date
+    if (data.al !== 2 && today >= bonusDate) {
+        setData((prevData) => ({
+            ...prevData,
+            al: 2
+        }));
+    }
+}, [data]);
 
   const handleSearchChange = (e) => {
     if (e.target.id === "empid") {
@@ -78,6 +89,13 @@ export default function GenerateSlip() {
           lt: result.totalDays,
           bl: result.balance,
           against_balance: result.against_balance,
+          hra: result.hra,
+          lta: result.lta,
+          ta: result.ta,
+          sa: result.sa,
+          ma: result.ma,
+          pfempes:  result.pfempes,
+          bonus_date: result.bonus_date
         });
       } else {
         throw new Error("Failed to fetch employee data: Response is not JSON");
@@ -222,7 +240,6 @@ const handleSubmit = async (e) => {
                 <input type="number" name="totded" id="totded"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.totded}/>
                 <hr />
                 <input type="number" name="totsal" id="totsal"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.totsal} required/>
-                
               </div>
             </div>
           </div>
@@ -243,8 +260,7 @@ const handleSubmit = async (e) => {
                 <input type="number" name="against_balance" id="against_balance"className="border p-1 rounded-sm" onChange={handleFormChange} value={data.against_balance} required/>
               </div>
             </div>
-          </div>
-          
+          </div>          
         </form>
         
       )}

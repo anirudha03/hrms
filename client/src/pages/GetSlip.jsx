@@ -23,10 +23,13 @@ const GetSlip = () => {
         <div className="flex justify-between">
             <div className="flex flex-ROW">
                 <img src={logo} alt="Image Description" className="w-32 h-32" />
-                <p className="mt-9 text-slate-800 font-bold">ENGINEERING <br /> SERVICE</p>
+                <p className="mt-7 text-slate-800 font-bold">ENGINEERING <br /> SERVICE <br /> (LLP)</p>
             </div>
-            <div className="ml-4 font-semibold">
-                DOI : {slip.doi}
+            <div className="mt-2 ml-4 font-semibold text-right text-blue-800">
+                Rev. 01 <br />
+                DOI : {slip.doi} <br />
+                RESTRICTED
+                
             </div>
         </div>
       <table className="w-full border-separate border-spacing-2">
@@ -122,6 +125,14 @@ const GetSlip = () => {
           </tr>
         </tbody>
       </table>
+      <p className="mt-6 mb-3 font-bold">Note: This is digitally generated slip, signature is not required</p>
+      <div className="flex flex-row gap-16 justify-center text-blue-800 font-semibold">
+        <div>Page 1 of 1</div>
+        <div className="text-right text-sm">Reg. Office: 701/D Wing, Pawapuri CHSL, Ashok Nagar, Kandivali(E) Mumbai-400101 <br />
+        Engg. Office:73, Kalpataru Avenue, Opp ESIS Hospital, Akurli Road, Kandivali(E) <br />
+        Mumbai-400101, Tel: +91 22 4978 1259
+        </div>
+      </div>
       <button onClick={() => window.print()} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 printbutton">
         Print Slip
       </button>

@@ -1,7 +1,9 @@
 import Employee from "../models/employee.model.js";
+import BankDetails from "../models/bank.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+
 
 export const signin = async (req, res, next) => {
   const { empid, password } = req.body;
@@ -40,14 +42,22 @@ export const signOut = async (req, res, next) => {
 };
 
 export const viewData = async (req, res, next) => {
-    try {
-      const employee = await Employee.findOne({ empid: req.params.empid });
-      if (!employee) {
-        return next(errorHandler(404, "Employee not found!"));
-      }
-      const { password, ...employeeWithoutPassword } = employee.toObject();
-      res.status(200).json(employeeWithoutPassword);
-    } catch (error) {
-      next(error);
+  try {
+    const empid = req.params.empid;
+    const currentUserEmpId = req.query.empid;
+
+    if (empid === currentUserEmpId) {
+      const employeeData = await Employee.findOne({ empid: currentUserEmpId });
+      const bankDetailsData = await BankDetails.findOne({ empRef: currentUserEmpId });
+      res.status(200).json({ employeeData, bankDetailsData });
+    } else {
+      res.redirect('/employee-home');
+      
     }
-  };
+  } catch (error) {
+    console.error('Error handling employee data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
