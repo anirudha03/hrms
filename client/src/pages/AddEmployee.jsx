@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +26,7 @@ export default function AddEmployee() {
     status: "active", // Default value set to 'Active'
     doj: "",
     passport: "",
+    bonusMonths: 0,
     bonus_date: "",
     leave_balance: 0, // Default value set to 0
     oneyear: "0", // Default value set to '0' as a string
@@ -43,11 +44,29 @@ export default function AddEmployee() {
     sa:0,
     pfempes:0,    
   });
-
+  const [departments, setDepartments] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  console.log(formData);
+  // console.log(formData);
+
+  useEffect(() => {
+    // Fetch departments when the component mounts
+    fetchDepartments();
+  }, []);
+  const fetchDepartments = async () => {
+    try {
+      const res = await fetch('/api/crud/get-department');
+      const data = await res.json();
+      if (data.success) {
+        setDepartments(data.data.map(department => department.department));
+      } else {
+        setError("Failed to fetch departments");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   const handleChange = (e) => {
     if (e.target.id === "male" || e.target.id === "female") {
@@ -60,6 +79,12 @@ export default function AddEmployee() {
       setFormData({
         ...formData,
         home: e.target.id,
+      });
+    }
+    if (e.target.id === "department") {
+      setFormData({
+        ...formData,
+        department: e.target.value,
       });
     }
     if (e.target.id === "married" || e.target.id === "single") {
@@ -84,6 +109,22 @@ export default function AddEmployee() {
           [e.target.id]: e.target.value,
         });
       }
+      if (e.target.id === "doj") {
+        // If Date of Joining changes, update bonus date
+        setFormData({
+          ...formData,
+          doj: e.target.value,
+          bonus_date: calculateBonusDate(e.target.value, formData.bonusMonths)
+        });
+      }
+      if (e.target.id === "bonusMonths") {
+        // If the bonus months input changes, update bonus date
+        setFormData({
+          ...formData,
+          bonusMonths: e.target.value,
+          bonus_date: calculateBonusDate(formData.doj, e.target.value)
+        });
+      }
     else if (e.target.type === "date") {
         // Convert date to YYYY-MM-DD format
         const formattedDate = e.target.valueAsDate
@@ -94,6 +135,16 @@ export default function AddEmployee() {
           [e.target.id]: formattedDate,
         });
       }
+  };
+
+  const calculateBonusDate = (doj, bonusMonths) => {
+    if (!doj || !bonusMonths) return ""; // If either doj or bonusMonths is empty, return empty string for bonus date
+
+    const dojDate = new Date(doj);
+    const bonusDate = new Date(dojDate.setMonth(dojDate.getMonth() + parseInt(bonusMonths)));
+
+    // Format the bonus date as "YYYY-MM-DD"
+    return bonusDate.toISOString().split("T")[0];
   };
 
   const handleSubmit = async (e) => {
@@ -182,8 +233,13 @@ export default function AddEmployee() {
             Post:
             <input type="text" id="post" className="border p-1 rounded-sm" onChange={handleChange} value={formData.post} />
             Department:
-            <input type="text" id="department" className="border p-1 rounded-sm" onChange={handleChange} value={formData.department} />
-            Basic Salary:
+          <select id="department" className="border p-1 rounded-sm" onChange={handleChange} value={formData.department}>
+            <option value="">Select Department</option>
+            {departments.map(department => (
+              <option key={department} value={department}>{department}</option>
+            ))}
+          </select>
+          Basic Salary:
             <input type="number" id="bsalary" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bsalary} />
             Status:
             <div className='flex gap-2'>
@@ -197,6 +253,8 @@ export default function AddEmployee() {
 
             Date of joining:
             <input type="date" id="doj" className="border p-1 rounded-sm" onChange={handleChange} value={formData.doj} />
+            Bonus Months:
+            <input type="number" id="bonusMonths" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonusMonths} />
             Date of Bonus:
             <input type="date" id="bonus_date" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonus_date} />
             Leave Balance:

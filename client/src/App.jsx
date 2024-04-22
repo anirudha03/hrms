@@ -26,6 +26,7 @@ import MayBeShow from "./components/MayBeShow";
 import EmpHomeContent from "./empPages/EmpHomeContent";
 import ViewDetails from "./empPages/ViewDetails";
 import HomeContent from "./pages/HomeContent";
+import Account from "./pages/Account";
 
 export default function App() {
   
@@ -57,6 +58,7 @@ export default function App() {
               <Route path="view-all-leaves" element={<ViewAllLeaves />} />
               <Route path="update-bank-details/:empid" element={<UpdateBank />} />
               <Route path="edit-leave/:id" element={<UpdateLeave />} />
+              <Route path="account" element={<Account />} />
               
             </Route>
           </Route>

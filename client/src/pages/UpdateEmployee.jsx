@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
 export default function UpdateEmployee() {
@@ -9,6 +9,7 @@ export default function UpdateEmployee() {
   });
   const navigate = useNavigate();
   // Define the state variable for data
+  const [departments, setDepartments] = useState([]);
   const [data, setData] = useState(null);
   const [formData, setFormData] = useState({
     empid: "",
@@ -28,6 +29,7 @@ export default function UpdateEmployee() {
     degree: "",
     post: "",
     department: "",
+    bonusMonths: 0,
     bsalary: "",
     status: "",
     doj: "",
@@ -42,6 +44,25 @@ export default function UpdateEmployee() {
     pfempes:0,
   });
 
+  useEffect(() => {
+    // Fetch departments when the component mounts
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const res = await fetch('/api/crud/get-department');
+      const data = await res.json();
+      if (data.success) {
+        setDepartments(data.data.map(department => department.department));
+      } else {
+        setError("Failed to fetch departments");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const handleSearchChange = (e) => {
     if (e.target.id === 'empid') {
       setEmpSearch({
@@ -52,50 +73,40 @@ export default function UpdateEmployee() {
   };
 
   const handleChange = (e) => {
-    if (e.target.id === "male" || e.target.id === "female") {
+    const { id, type, value } = e.target;
+  
+    // Handle checkbox changes
+    if (type === "checkbox") {
       setFormData({
         ...formData,
-        gender: e.target.id,
+        [id]: value,
       });
-    }
-    if (e.target.id === "permanent" || e.target.id === "rent") {
-      setFormData({
-        ...formData,
-        hometype: e.target.id,
-      });
-    }
-    if (e.target.id === "married" || e.target.id === "single") {
-      setFormData({
-        ...formData,
-        mstatus: e.target.id,
-      });
-    }
-    if (e.target.id === "active" || e.target.id === "inactive" || e.target.id === "resigned") {
-      setFormData({
-        ...formData,
-        status: e.target.id,
-      });
-    }
-    if (
-        e.target.type === 'number' ||
-        e.target.type === 'text' ||
-        e.target.type === 'textarea'
-      ) {
-        setFormData({
-          ...formData,
-          [e.target.id]: e.target.value,
-        });
+    } else {
+      // Handle other input changes
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [id]: value,
+      }));
+  
+      // If Date of Joining changes, recalculate the Bonus Date
+      if (id === "doj") {
+        const updatedBonusDate = calculateBonusDate(value, formData.bonusMonths);
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          bonus_date: updatedBonusDate,
+        }));
       }
-    else if (e.target.type === "date") {
-        // Convert date to YYYY-MM-DD format
-        const formattedDate = e.target.valueAsDate
-          ? e.target.valueAsDate.toISOString().split("T")[0]
-          : "";
-        setFormData({
-          ...formData,
-          [e.target.id]: formattedDate,
-        });
+  
+      // If Bonus Months changes, update the Bonus Date
+      if (id === "bonusMonths") {
+        const updatedBonusDate = calculateBonusDate(formData.doj, value);
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          bonusMonths: value,
+          bonus_date: updatedBonusDate,
+        }));
       }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -103,15 +114,18 @@ export default function UpdateEmployee() {
     try {
       const res = await fetch(`/api/crud/get/${empSearch.empid}`);
       const fetchedData = await res.json();
-      console.log(fetchedData)
-      setData(fetchedData); // Set the data when fetched
-      setFormData(fetchedData); // Set the form data when fetched
+      setData(fetchedData);
+      setFormData({
+        ...fetchedData,
+        department: fetchedData.department // Set the department explicitly
+      });
     } catch (error) {
       setError(error);
     }
   };
+  
 
-  const handleUpdate = async(e)=>{
+  const handleUpdate = async (e) => {
     try {
       setLoading(true);
       const res = await fetch(`/api/crud/update/${formData.empid}`, {
@@ -119,21 +133,33 @@ export default function UpdateEmployee() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData), // Assuming data contains all the updated employee information
+        body: JSON.stringify(formData),
       });
       const responseData = await res.json();
-      console.log(responseData)
+      console.log(responseData); // Log the response data
       setLoading(false);
       if (responseData) {
-        navigate(`/home`); // Navigate to "/home" upon successful update
+        console.log("Update successful!"); // Log if the update is successful
+        navigate(`/home`);
       } else {
-        setError(responseData.message); // Handle error response from the server
+        setError(responseData || "Failed to update employee"); // Log and set error message
       }
     } catch (error) {
       setLoading(false);
-      setError(error.message); // Handle fetch or other runtime errors
+      setError(error.message || "Failed to update employee"); // Log and set error message
     }
-  }
+  };
+  
+  const calculateBonusDate = (doj, bonusMonths) => {
+    if (!doj || !bonusMonths) return ""; // If either doj or bonusMonths is empty, return empty string for bonus date
+
+    const dojDate = new Date(doj);
+    const bonusDate = new Date(dojDate.setMonth(dojDate.getMonth() + parseInt(bonusMonths)));
+
+    // Format the bonus date as "YYYY-MM-DD"
+    return bonusDate.toISOString().split("T")[0];
+  };
+
 
   return (
     <main>
@@ -147,7 +173,6 @@ export default function UpdateEmployee() {
       {/* Display the message when data is not null */}
       {data && (
         <main className="p-1 max-w-4xl mx-auto">
-        {/* <h1 className="text-3xl font-semibold text-center my-2">Add Employee</h1> */}
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-1">
           <div className="flex flex-col gap-2 flex-1">
               Employee ID:
@@ -172,7 +197,7 @@ export default function UpdateEmployee() {
               <div className='flex gap-2'>
                 <input type='checkbox'id='permanent'className='w-5'onChange={handleChange}checked={formData.hometype === 'permanent'}/>
                 <span>Permanent</span>
-                <input type='checkbox'id='rent'className='w-5'onChange={handleChange}checked={formData.home === 'rent'}/>
+                <input type='checkbox'id='rent'className='w-5'onChange={handleChange}checked={formData.hometype === 'rent'}/>
                 <span>Rental</span>
               </div>
               Blood Group:
@@ -189,11 +214,10 @@ export default function UpdateEmployee() {
                 <input type='checkbox'id='single'className='w-5'onChange={handleChange}checked={formData.mstatus === 'single'}/>
                 <span>Single</span>
                 <input type='checkbox'id='married'className='w-5'onChange={handleChange}checked={formData.mstatus === 'married'}/>
-                <span>Female</span>
+                <span>Married</span>
               </div>
               Passport No.:
-              <input type="number" id="passport" className="border p-1 rounded-sm" onChange={handleChange} value={formData.passport} />
-                          
+              <input type="number" id="passport" className="border p-1 rounded-sm" onChange={handleChange} value={formData.passport} />                          
           </div>
           <div className='flex flex-col flex-1 gap-2'>
           Degree:
@@ -201,7 +225,12 @@ export default function UpdateEmployee() {
               Post:
               <input type="text" id="post" className="border p-1 rounded-sm" onChange={handleChange} value={formData.post} />
               Department:
-              <input type="text" id="department" className="border p-1 rounded-sm" onChange={handleChange} value={formData.department} />
+              <select id="department" className="border p-1 rounded-sm" onChange={handleChange} value={formData.department}>
+                <option value="">Select Department</option>
+                  {departments.map(department => (
+                <option key={department} value={department} selected={formData.department === department}>{department}</option>
+                ))}
+              </select>
               Basic Salary:
               <input type="number" id="bsalary" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bsalary} />
               Status:
@@ -216,6 +245,8 @@ export default function UpdateEmployee() {
   
               Date of joining:
               <input type="date" id="doj" className="border p-1 rounded-sm" onChange={handleChange} value={formData.doj} />
+              Bonus Months:
+              <input type="number" id="bonusMonths" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonusMonths} />
               Date of Bonus:
               <input type="date" id="bonus_date" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonus_date} />
               Leave Balance:

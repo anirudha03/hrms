@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function RequestLeave() {
   const { currentUserEmp } = useSelector((state) => state.employee);
-  // console.log(currentUserEmp.empid);
-
   const navigate = useNavigate();
 
   const [leaveData, setLeaveData] = useState({
@@ -14,7 +12,7 @@ export default function RequestLeave() {
     days: 0,
     reason: "",
     status: "Pending",
-    month: new Date().toISOString().split("-").slice(0, 2).join("-"),
+    month: "",
     empRef: currentUserEmp.empid,
   });
 
@@ -36,10 +34,6 @@ export default function RequestLeave() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLeaveData((prevLeaveData) => ({
-      ...prevLeaveData,
-      [name]: value,
-    }));
     if (name === "fromDate" || name === "toDate") {
       const days = calculateDays(
         name === "fromDate" ? value : leaveData.fromDate,
@@ -47,12 +41,19 @@ export default function RequestLeave() {
       );
       setLeaveData((prevLeaveData) => ({
         ...prevLeaveData,
+        [name]: value,
         days: days,
+        month: value.slice(0, 7), // Extracting year-month
+      }));
+    } else {
+      setLeaveData((prevLeaveData) => ({
+        ...prevLeaveData,
+        [name]: value,
       }));
     }
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("/api/leave/add-leave", {
@@ -119,7 +120,12 @@ export default function RequestLeave() {
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md w-full">Submit</button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md w-full"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

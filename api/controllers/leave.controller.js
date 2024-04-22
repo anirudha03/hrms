@@ -5,31 +5,45 @@ import { errorHandler } from "../utils/error.js";
 export const addLeave = async (req, res, next) => {
     try {
         const leave = new Leave(req.body);
-        await leave.save();
-        return res.status(201).json(leave);
+        const employee = await Employee.findOne({ empid: leave.empRef });
+        if (employee) {
+            if (leave.days > employee.leave_balance) {
+                leave.against_balance = leave.days - employee.leave_balance;
+            } else {
+                leave.against_balance = 0;
+            }
+            await leave.save();
+            return res.status(201).json(leave);
+        } else {
+            return res.status(404).json({ message: "Employee not found" });
+        }
     } catch (error) {
         next(error);
     }
 };
 
+
 export const updateLeave = async (req, res, next) => {
     try {
         const leaveId = req.params.id;
         const updatedLeave = await Leave.findByIdAndUpdate(leaveId, req.body, { new: true });
-        
+
         if (updatedLeave.status.toLowerCase() === "approved") {
             const employee = await Employee.findOne({ empid: updatedLeave.empRef });
             if (!employee) {
                 return next(errorHandler(404, 'Employee not found!'));
             }
             employee.leave_balance -= updatedLeave.days;
+            if (employee.leave_balance < 0) {
+                employee.leave_balance = 0;
+            }
             await employee.save();
         } else if (updatedLeave.status.toLowerCase() === "rejected") {
             const employee = await Employee.findOne({ empid: updatedLeave.empRef });
             if (!employee) {
                 return next(errorHandler(404, 'Employee not found!'));
             }
-            employee.leave_balance += updatedLeave.days; 
+            employee.leave_balance += updatedLeave.days;
             await employee.save();
         }
 
@@ -39,6 +53,7 @@ export const updateLeave = async (req, res, next) => {
         next(error);
     }
 };
+
 
 
 export const getLeavesEmp = async (req, res, next) => {

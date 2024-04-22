@@ -57,7 +57,7 @@ export default function EmpHome() {
             </Link>
             <Link
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              href="mailto:anirudhaadarsh37@gmail.com">
+              href="mailto:setpointengineerings@gmail.com">
               Mail HR
             </Link>
           </div>

@@ -106,7 +106,6 @@ export default function UpdateLeave() {
             type="number"
             name="days"
             value={formData.days}
-            readOnly
             onChange={handleChange}
             className="border border-gray-300 p-2 rounded-md"
             required

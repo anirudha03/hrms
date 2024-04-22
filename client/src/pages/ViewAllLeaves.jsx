@@ -8,7 +8,9 @@ export default function ViewAllLeaves() {
     toDate: '',
     days: '',
     empRef: '',
+    against_balance:'',
     status: '',
+
   });
 
   useEffect(() => {
@@ -76,6 +78,15 @@ export default function ViewAllLeaves() {
             <th className="px-4 py-2 text-center">
               <input
                 type="text"
+                placeholder="Against"
+                value={searchQueries.against_balance}
+                onChange={(e) => handleSearchInputChange(e, 'days')}
+                className="px-4 py-2 w-full bg-transparent border-none focus:outline-none text-center"
+              />
+            </th>
+            <th className="px-4 py-2 text-center">
+              <input
+                type="text"
                 placeholder="Employee ID"
                 value={searchQueries.empRef}
                 onChange={(e) => handleSearchInputChange(e, 'empRef')}
@@ -99,6 +110,7 @@ export default function ViewAllLeaves() {
               <td className="px-4 py-2 text-center">{leave.fromDate}</td>
               <td className="px-4 py-2 text-center">{leave.toDate}</td>
               <td className="px-4 py-2 text-center">{leave.days}</td>
+              <td className="px-4 py-2 text-center">{leave.against_balance}</td>
               <td className="px-4 py-2 text-center">{leave.empRef}</td>
               <td className="px-4 py-2 text-center">{leave.status}</td>
               <td className="px-4 py-2 text-center">

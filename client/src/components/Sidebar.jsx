@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IoPersonAdd } from "react-icons/io5";
+import { IoPersonAdd, IoHomeSharp } from "react-icons/io5";
 import { GrDocumentUpdate, GrView } from "react-icons/gr";
 import { FaSearch, FaListUl } from "react-icons/fa";
 import { BsBank2 } from "react-icons/bs";
@@ -12,6 +12,11 @@ export default function Sidebar() {
   return (
     <div className="w-1/6 bg-blue-100 p-2 overflow-y-auto shadow-lg">
       <ul>
+        <Link to="/home">
+          <li className="mb-2 rounded-md p-2 bg-blue-100 hover:bg-blue-200 transition-colors duration-300">
+          <span className="text-blue-600 hover:text-blue-800 flex gap-3"><IoHomeSharp className='mt-1'/>Home</span>
+          </li>
+        </Link>
         <Link to="/home/add-employee">
           <li className="mb-2 rounded-md p-2 bg-blue-100 hover:bg-blue-200 transition-colors duration-300">
           <span className="text-blue-600 hover:text-blue-800 flex gap-3"><IoPersonAdd className='mt-1'/>Add Employee</span>

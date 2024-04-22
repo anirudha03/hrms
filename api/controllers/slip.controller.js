@@ -95,23 +95,21 @@ export const getEmpMonth = async (req, res) => {
         }
         const prevMonth = `${prevYear}-${prevMonthNumber.toString().padStart(2, '0')}`;
 
-        // console.log('Previous Month:', prevMonth);
         const employee = await Employee.findOne({ empid });
 
         if (!employee) {
             return res.status(404).json({ error: 'Employee not found' });
         }
 
-        // Retrieve leaves for the specified month with status "approved"
         const leaves = await Leave.find({ empRef: empid, month: prevMonth, status: "approved" });
 
-        // Calculate total leave days for the month
         let totalDays = 0;
+        let againstBalance = 0; // Initialize against_balance
         leaves.forEach(leave => {
             totalDays += leave.days;
+            againstBalance += leave.against_balance || 0; // Add against_balance
         });
 
-        // Combine employee information and total days
         const result = {
             empid: employee.empid,
             fname: employee.fname,
@@ -122,13 +120,13 @@ export const getEmpMonth = async (req, res) => {
             month: month,
             totalDays: totalDays,
             balance: employee.leave_balance,
-            against_balance: leaves.against_balance,
-            hra:employee.hra,
-            lta:employee.lta,
-            ta:employee.ta,
-            ma:employee.ta,
-            sa:employee.sa,
-            pfempes:employee.pfempes,
+            against_balance: againstBalance, // Set against_balance
+            hra: employee.hra,
+            lta: employee.lta,
+            ta: employee.ta,
+            ma: employee.ta,
+            sa: employee.sa,
+            pfempes: employee.pfempes,
             bonus_date: employee.bonus_date,
         };
 

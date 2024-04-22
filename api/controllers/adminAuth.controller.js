@@ -2,6 +2,8 @@ import Admin from "../models/admin.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -43,6 +45,21 @@ export const signin = async (req, res, next) => {
       res.status(200).json('User has been logged out');
     } catch (error) {
       next(error)
+    }
+  }
+
+  export const getStorageStats = async(req,res, next)=>{
+    try {
+      const db = mongoose.connection.db;
+      const collections = await db.listCollections().toArray();
+      const storageStats = await Promise.all(collections.map(async ({ name }) => {
+        const stats = await db.command({ collStats: name });
+        return { name, size: stats.size };
+      }));
+      res.json(storageStats);
+    } catch (error) {
+      console.error('Error retrieving storage stats:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
   

@@ -35,35 +35,6 @@ export default function GenerateSlip() {
     against_balance:0,
     bonus_date:""
   });
-
-  useEffect(() => {
-    console.log(data.bonus_date); // Log the updated state here
-    const today = new Date();
-    const bonusDate = new Date(data.bonus_date);
-
-    // Check if data.al is not already 2 and today's date is greater than or equal to the bonus date
-    if (data.al !== 2 && today >= bonusDate) {
-        setData((prevData) => ({
-            ...prevData,
-            al: 2
-        }));
-    }
-}, [data]);
-
-  const handleSearchChange = (e) => {
-    if (e.target.id === "empid") {
-      setEmpSearch({
-        ...empSearch,
-        empid: e.target.value,
-      });
-    }
-    if (e.target.id === "month") {
-      setEmpSearch({
-        ...empSearch,
-        month: e.target.value,
-      });
-    }
-  };
   const getEmployeeInfo = async (e) => {
     e.preventDefault();
     try {
@@ -105,13 +76,62 @@ export default function GenerateSlip() {
     }
   };
 
+  useEffect(() => {
+    const today = new Date();
+    const bonusDate = new Date(data.bonus_date);
+  
+    // Check if today's date is greater than or equal to the bonus date
+    if (today >= bonusDate) {
+      // If so, set al to 2
+      setData((prevData) => ({
+        ...prevData,
+        al: 2
+      }));
+    } else {
+      // If not, set al to 0
+      setData((prevData) => ({
+        ...prevData,
+        al: 0
+      }));
+    }
+  }, [data.bonus_date]);
+  
+
+  const handleSearchChange = (e) => {
+    if (e.target.id === "empid") {
+      setEmpSearch({
+        ...empSearch,
+        empid: e.target.value,
+      });
+    }
+    if (e.target.id === "month") {
+      setEmpSearch({
+        ...empSearch,
+        month: e.target.value,
+      });
+    }
+  };
+  
+
   const handleFormChange = (e) => {
     const value = e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value;
-    setData({
-    ...data,
-    [e.target.id]: value,
-  });
+    
+    // Check if the field being changed is 'al' and the bonus date has passed
+    if (e.target.id === 'al' && new Date() >= new Date(data.bonus_date)) {
+      // Allow manual changes to 'al'
+      setData((prevData) => ({
+        ...prevData,
+        al: value,
+      }));
+    } else {
+      // Update other fields as usual
+      setData({
+        ...data,
+        [e.target.id]: value,
+      });
+    }
   };
+  
 
   const calculateTotals = () => {
     const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta;

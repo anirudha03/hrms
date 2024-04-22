@@ -1,4 +1,7 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import HamburgerMenu from "./HamburgerMenu";
+import { useDispatch } from "react-redux";
 import {
   deleteUserFailure,
   deleteUserSuccess,
@@ -11,17 +14,13 @@ import {
   signOutFailureEmp,
   signOutStartEmp,
 } from "../redux/employee/employeeSlice";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
-  const { currentUser } = useSelector((state) => state.user);
-  const { currentUserEmp } = useSelector((state) => state.employee);
-
   const dispatch = useDispatch();
 
   const handleSignOut = async () => {
     try {
-      dispatch(signOutStart);
+      dispatch(signOutStart()); 
       const res = await fetch("/api/admin-auth/signout");
       const data = await res.json();
       if (data.success === false) {
@@ -33,9 +32,10 @@ export default function Header() {
       dispatch(signOutFailure(error.message));
     }
   };
+
   const handleSignOutEmp = async () => {
     try {
-      dispatch(signOutStartEmp);
+      dispatch(signOutStartEmp()); 
       const res = await fetch("/api/employee-auth/signout");
       const data = await res.json();
       if (data.success === false) {
@@ -51,29 +51,16 @@ export default function Header() {
   return (
     <div className="bg-slate-300 ">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
-        <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
+        <h1 className="font-bold text-xl sm:text-2xl md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl ">
           <span className="text-slate-500">Set</span>
           <span className="text-slate-700">Point</span>
         </h1>
 
         <ul className="flex gap-4">
-          {currentUser || currentUserEmp ? (
-            <span className="flex gap-4">
-              <Link to={currentUserEmp ? "/employee-home" : "/home"}>
-                <li>Home</li>
-              </Link>
-              <span
-                onClick={currentUserEmp ? handleSignOutEmp : handleSignOut}
-                className="text-red-700 cursor-pointer"
-              >
-                Sign out
-              </span>
-            </span>
-          ) : (
-            <Link to="/sign-in">
-              <li>Sign In</li>
-            </Link>
-          )}
+          <li>
+            <HamburgerMenu handleSignOut={handleSignOut} handleSignOutEmp={handleSignOutEmp}
+            />
+          </li>
         </ul>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import Employee from "../models/employee.model.js";
 import BankDetails from "../models/bank.model.js";
+import Department from "../models/department.model.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
@@ -160,6 +161,40 @@ export const updateBankDetails = async (req, res, next) => {
       return res.status(200).json({ success: true, message: 'Bank details updated successfully', data: updatedBankDetails });
   } catch (error) {
       return next(error);
+  }
+};
+
+// Department crud
+export const addDep = async(req,res,next)=>{
+  try{
+    const departmentData = req.body;
+      const department = new Department(departmentData);
+      await department.save();
+      return res.status(200).json({ success: true, message: 'Department added successfully' });
+  }catch(error){
+    return next(error)
+  }
+}
+
+export const getDep = async (req, res, next) => {
+  try {
+      const department = await Department.find();
+      return res.status(200).json({ success: true, data: department });
+  } catch (error) {
+      return next(error);
+  }
+};
+
+export const deleteDep = async (req, res, next) => {
+  try {
+    const departmentId = req.params.id;
+    const deletedDepartment = await Department.findByIdAndDelete(departmentId);
+    if (!deletedDepartment) {
+      return res.status(404).json({ success: false, message: 'Department not found' });
+    }
+    return res.status(200).json({ success: true, message: 'Department deleted successfully' });
+  } catch (error) {
+    return next(error);
   }
 };
 
