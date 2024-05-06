@@ -166,7 +166,7 @@ export default function SearchEmployee() {
   
               Date of joining:
               <input type="date" id="doj" className="border p-1 rounded-sm"  value={formData.doj} />
-              Date of Bonus:
+              Date of Probation:
               <input type="date" id="bonus_date" className="border p-1 rounded-sm"  value={formData.bonus_date} />
               Leave Balance:
               <input type="number" id="leave_balance" className="border p-1 rounded-sm"  value={formData.leave_balance} />
