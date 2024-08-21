@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function GenerateSlip() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [empSearch, setEmpSearch] = useState({
     empid: "",
     month: "",
@@ -31,8 +31,10 @@ export default function GenerateSlip() {
     lt: 0,
     td: 0,
     bl: 0,
+    el: 0,
+    npd: 0,
     doi: "",
-    against_balance:0,
+    against_balance: 0,
     bonus_date:""
   });
   const getEmployeeInfo = async (e) => {
@@ -80,18 +82,15 @@ export default function GenerateSlip() {
     const today = new Date();
     const bonusDate = new Date(data.bonus_date);
   
-    // Check if today's date is greater than or equal to the bonus date
     if (today >= bonusDate) {
-      // If so, set al to 2
       setData((prevData) => ({
         ...prevData,
         al: 2
       }));
     } else {
-      // If not, set al to 0
       setData((prevData) => ({
         ...prevData,
-        al: 0
+        al: 1
       }));
     }
   }, [data.bonus_date]);
@@ -137,12 +136,17 @@ export default function GenerateSlip() {
     const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta;
     const totalDeductions = data.ptax + data.pfemper + data.pfempes;
     const totalSalary = totalEarnings - totalDeductions;
+    const td = data.bl + data.lt - data.against_balance;
+    // net-paid-days, balanced-leaves=0, leaves-taken =14, alloted-leaves=2; against balance= 2;
 
+    // june, bal=5; in the month of june=> lt= 3; bal =2;
     setData({
       ...data,
       totearn: totalEarnings,
       totded: totalDeductions,
       totsal: totalSalary,
+      // npd: npd,
+      td: td,
     });
   };
 
@@ -270,7 +274,9 @@ const handleSubmit = async (e) => {
                 <label htmlFor="lt" className="m-1">Leaves Taken:</label>
                 <label htmlFor="td" className="m-1">Total Days:</label>
                 <label htmlFor="bl" className="m-1">Balanced Leaves:</label>
-                <label htmlFor="against_balance" className="m-1">Against Balance</label>
+                <label htmlFor="against_balance" className="m-2">Against Balance</label>
+                <label htmlFor="el" className="m-1">Encashed Leaves</label>
+                <label htmlFor="npd" className="m-1">Net Paid Days</label>
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 <input type="number" name="al" id="al" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.al}/>
@@ -278,6 +284,8 @@ const handleSubmit = async (e) => {
                 <input type="number" name="td" id="td"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.td}/>
                 <input type="number" name="bl" id="bl"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.bl}/>
                 <input type="number" name="against_balance" id="against_balance"className="border p-1 rounded-sm" onChange={handleFormChange} value={data.against_balance} required/>
+                <input type="number" name="el" id="el"className="border p-1 rounded-sm" onChange={handleFormChange} value={data.el} required/>
+                <input type="number" name="npd" id="npd"className="border p-1 rounded-sm" onChange={handleFormChange} value={data.npd} required/>
               </div>
             </div>
           </div>          

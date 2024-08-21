@@ -6,7 +6,7 @@ import { FaSearch, FaListUl } from "react-icons/fa";
 import { BsBank2 } from "react-icons/bs";
 import { AiTwotoneFileAdd } from "react-icons/ai";
 import { HiDocumentSearch } from "react-icons/hi";
-
+import { RiDeleteBin5Fill } from "react-icons/ri";
 
 export default function Sidebar() {
   return (
@@ -55,6 +55,11 @@ export default function Sidebar() {
         <Link to="/home/search-slip">
           <li className="mb-2 rounded-md p-2 bg-blue-100 hover:bg-blue-200 transition-colors duration-300">
             <span className="text-blue-600 hover:text-blue-800 flex gap-3"><HiDocumentSearch className='mt-1 scale-125'/>Search Slip</span>
+          </li>
+        </Link>
+        <Link to="/home/">
+          <li className="mb-2 rounded-md p-2 bg-blue-100 hover:bg-red-400 transition-colors duration-300">
+            <span className="text-blue-600 hover:text-white flex gap-3"><RiDeleteBin5Fill className='mt-1 scale-125'/>Delete Employee</span>
           </li>
         </Link>
       </ul>

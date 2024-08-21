@@ -54,8 +54,6 @@ export const updateLeave = async (req, res, next) => {
     }
 };
 
-
-
 export const getLeavesEmp = async (req, res, next) => {
     try {
         const empid = req.params.empid;
@@ -70,6 +68,7 @@ export const getLeavesEmp = async (req, res, next) => {
         next(error);
     }
 };
+
 export const getLeave = async (req, res, next) => {
     try {
         const id = req.params.id;

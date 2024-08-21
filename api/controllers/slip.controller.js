@@ -4,9 +4,9 @@ import Employee from '../models/employee.model.js';
 import Leave from '../models/leave.model.js';
 
 export const addSlip = async (req, res) => {
-    const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, doi } = req.body;
+    const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi } = req.body;
     
-    const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, doi });
+    const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi });
 
     try {
         const savedSlip = await newSlip.save();
