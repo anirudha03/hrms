@@ -20,6 +20,7 @@ export default function GenerateSlip() {
     ta: 0,
     sa: 0,
     ma: 0,
+    mpa: 0,
     lta: 0,
     totearn: 0,
     ptax: 0,
@@ -67,9 +68,11 @@ export default function GenerateSlip() {
           ta: result.ta,
           sa: result.sa,
           ma: result.ma,
+          mpa: result.mpa,
           pfempes:  result.pfempes,
           bonus_date: result.bonus_date
         });
+        console.log(data)
       } else {
         throw new Error("Failed to fetch employee data: Response is not JSON");
       }
@@ -133,7 +136,7 @@ export default function GenerateSlip() {
   
 
   const calculateTotals = () => {
-    const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta;
+    const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta +  data.mpa;
     const totalDeductions = data.ptax + data.pfemper + data.pfempes;
     const totalSalary = totalEarnings - totalDeductions;
     const td = data.bl + data.lt - data.against_balance;
@@ -239,15 +242,16 @@ const handleSubmit = async (e) => {
                 <label htmlFor="ta" className="m-1">Travel Allowance:</label>
                 <label htmlFor="sa" className="m-1">Special Allowance:</label>
                 <label htmlFor="ma" className="m-2">Medical Allowance:</label>
+                <label htmlFor="ma" className="m-2">Mediclaim:</label>
                 <label htmlFor="lta" className="m-1">Leave Travel Allowance:</label>
-                <label htmlFor="totearn" className="m-1">Total Earnings:</label>
+                <label htmlFor="totearn" className="m-1">Gross Earnings:</label>
                 <br />
                 <label htmlFor="ptax" className="m-2">Professional Tax:</label>
                 <label htmlFor="pfemper" className="m-1">PF@Employer:</label>
                 <label htmlFor="pfempes" className="m-1">PF@Employees:</label>
-                <label htmlFor="totded" className="m-2">Total Deductions:</label>
+                <label htmlFor="totded" className="m-2">Gross Deductions:</label>
                 <hr />
-                <label htmlFor="totsal" className="m-2">Total Salary:</label>
+                <label htmlFor="totsal" className="m-2">Net Salary:</label>
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 <input type="number" name="bsal" id="bsal" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.bsal}/>
@@ -255,6 +259,7 @@ const handleSubmit = async (e) => {
                 <input type="number" name="ta" id="ta"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.ta}/>
                 <input type="number" name="sa" id="sa"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.sa}/>
                 <input type="number" name="ma" id="ma"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.ma}/>
+                <input type="number" name="mpa" id="mpa"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.mpa}/>
                 <input type="number" name="lta" id="lta"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.lta}/>
                 <input type="number" name="totearn" id="totearn"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.totearn}/>
                 <br />

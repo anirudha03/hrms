@@ -38,6 +38,7 @@ export default function SearchEmployee() {
     lta:0,
     ta:0,
     ma:0,
+    mpa:0,
     sa:0,
     pfempes:0,
   });
@@ -191,6 +192,8 @@ export default function SearchEmployee() {
               <input type="number" id="sa" className="border p-1 rounded-sm" value={formData.sa} />
               Medical Alowance:
               <input type="number" id="ma" className="border p-1 rounded-sm" value={formData.ma} />
+              Medical Alowance:
+              <input type="number" id="mpa" className="border p-1 rounded-sm" value={formData.mpa} />
               Leave Travel Alowance:
               <input type="number" id="lta" className="border p-1 rounded-sm" value={formData.lta} />
               PF Employee:

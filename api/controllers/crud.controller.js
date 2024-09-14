@@ -9,7 +9,7 @@ export const addEmployee = async (req, res, next) => {
     const {
       empid, fname, mname, lname, email, phone, aadhar, dob, address, home,
       bloodgroup, gender, mstatus, degree, post, department, bsalary, status,
-      doj, passport, bonus_date, leave_balance, oneyear, password, hra, lta, ma, sa, pfempes, ta,
+      doj, passport, bonus_date, leave_balance, oneyear, password, hra, lta, ma, mpa, sa, pfempes, ta,
       pancard, accno, bank_name, ifsc, branch, holder_name
     } = req.body;
 
@@ -20,7 +20,7 @@ export const addEmployee = async (req, res, next) => {
     const employee = new Employee({
       empid, fname, mname, lname, email, phone, aadhar, dob, address, hometype: home,
       bloodgroup, gender, mstatus, degree, post, department, bsalary, status,
-      doj, passport, bonus_date, leave_balance, oneyear, password: hashedPassword, hra, lta, ma, sa, pfempes, ta
+      doj, passport, bonus_date, leave_balance, oneyear, password: hashedPassword, hra, lta, ma, mpa, sa, pfempes, ta
     });
 
     // Save the employee to the database

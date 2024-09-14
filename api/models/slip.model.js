@@ -13,6 +13,7 @@ const salarySlipSchema = new Schema({
   ta: { type: Number, default: null },
   sa: { type: Number, default: null },
   ma: { type: Number, default: null },
+  mpa: { type: Number, default: null },
   lta: { type: Number, default: null },
   totearn: { type: Number, default: null },
   ptax: { type: Number, default: null },

@@ -39,6 +39,7 @@ const employeeSchema = new Schema({
     ta: { type: Number, default: null },
     sa: { type: Number, default: null },
     ma: { type: Number, default: null },
+    mpa: { type: Number, default: null },
     lta: { type: Number, default: null },
     pfempes: { type: Number, default: null },
 }, {timestamps:true});

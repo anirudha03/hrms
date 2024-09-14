@@ -4,9 +4,9 @@ import Employee from '../models/employee.model.js';
 import Leave from '../models/leave.model.js';
 
 export const addSlip = async (req, res) => {
-    const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi } = req.body;
+    const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, mpa, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi } = req.body;
     
-    const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi });
+    const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, mpa, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi });
 
     try {
         const savedSlip = await newSlip.save();
@@ -120,11 +120,12 @@ export const getEmpMonth = async (req, res) => {
             month: month,
             totalDays: totalDays,
             balance: employee.leave_balance,
-            against_balance: againstBalance, // Set against_balance
+            against_balance: againstBalance, 
             hra: employee.hra,
             lta: employee.lta,
             ta: employee.ta,
-            ma: employee.ta,
+            ma: employee.ma,
+            mpa: employee.mpa,
             sa: employee.sa,
             pfempes: employee.pfempes,
             bonus_date: employee.bonus_date,

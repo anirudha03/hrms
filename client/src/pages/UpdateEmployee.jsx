@@ -40,6 +40,7 @@ export default function UpdateEmployee() {
     lta:0,
     ta:0,
     ma:0,
+    mpa:0,
     sa:0,
     pfempes:0,
   });
@@ -262,6 +263,8 @@ export default function UpdateEmployee() {
               <input type="number" id="sa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.sa} />
               Medical Alowance:
               <input type="number" id="ma" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ma} />
+              Mediclaim:
+              <input type="number" id="mpa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.mpa} />
               Leave Travel Alowance:
               <input type="number" id="lta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lta} />
               PF Employee:
