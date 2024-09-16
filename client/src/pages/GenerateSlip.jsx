@@ -137,7 +137,7 @@ export default function GenerateSlip() {
 
   const calculateTotals = () => {
     const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta +  data.mpa;
-    const totalDeductions = data.ptax + data.pfemper + data.pfempes;
+    const totalDeductions = data.ptax + data.pfemper + data.pfempes + data.mpa;
     const totalSalary = totalEarnings - totalDeductions;
     const td = data.bl + data.lt - data.against_balance;
     // net-paid-days, balanced-leaves=0, leaves-taken =14, alloted-leaves=2; against balance= 2;
@@ -242,13 +242,14 @@ const handleSubmit = async (e) => {
                 <label htmlFor="ta" className="m-1">Travel Allowance:</label>
                 <label htmlFor="sa" className="m-1">Special Allowance:</label>
                 <label htmlFor="ma" className="m-2">Medical Allowance:</label>
-                <label htmlFor="ma" className="m-2">Mediclaim:</label>
+                <label htmlFor="ma" className="m-2">Mediclaim & PA:</label>
                 <label htmlFor="lta" className="m-1">Leave Travel Allowance:</label>
                 <label htmlFor="totearn" className="m-1">Gross Earnings:</label>
                 <br />
                 <label htmlFor="ptax" className="m-2">Professional Tax:</label>
                 <label htmlFor="pfemper" className="m-1">PF@Employer:</label>
                 <label htmlFor="pfempes" className="m-1">PF@Employees:</label>
+                <label htmlFor="pfempes" className="m-1">Mediclaim & PA:</label>
                 <label htmlFor="totded" className="m-2">Gross Deductions:</label>
                 <hr />
                 <label htmlFor="totsal" className="m-2">Net Salary:</label>
@@ -266,6 +267,7 @@ const handleSubmit = async (e) => {
                 <input type="number" name="ptax" id="ptax"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.ptax}/>
                 <input type="number" name="pfemper" id="pfemper"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.pfemper}/>
                 <input type="number" name="pfempes" id="pfempes"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.pfempes}/>
+                <input type="number" name="mpa" id="mpa"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.mpa}/>
                 <input type="number" name="totded" id="totded"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.totded}/>
                 <hr />
                 <input type="number" name="totsal" id="totsal"className="border p-1 rounded-sm"onChange={handleFormChange}value={data.totsal} required/>
