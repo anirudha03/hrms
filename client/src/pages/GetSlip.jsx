@@ -37,7 +37,7 @@ const GetSlip = () => {
             <td className="px-4 py-2">Employee ID:</td>
             <td className="px-4 py-1 border border-gray-300 rounded-lg ">{slip.empRef}</td>
             <td className="px-4 py-2">Net Paid Days:</td>
-            <td className="px-4 py-1 border border-gray-300 rounded-lg "></td>
+            <td className="px-4 py-1 border border-gray-300 rounded-lg ">{slip.npd}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Employee Name:</td>
@@ -132,14 +132,14 @@ const GetSlip = () => {
           </tr>
         </tbody>
       </table>
-      <div className="mt-5 text-slate-500">
+      <div className="mt-5 text-slate-950">
         Note: Encashment of leaves will be done in the month of March of the current Financial year.
       </div>
-      <p className="mt-0 mb-3 text-slate-500"> This is digitally generated slip, signature is not required</p>
+      <p className="mt-0 mb-3 text-orange-600"> This is digitally generated slip, signature is not required</p>
       <div className="flex flex-row gap-16 justify-center text-blue-800 font-semibold">
         <div>Page 1 of 1</div>
         <div className="text-right text-sm">Reg. Office: 701/D Wing, Pawapuri CHSL, Ashok Nagar, Kandivali(E) Mumbai-400101 <br />
-          Engg. Office:73, Kalpataru Avenue, Opp ESIS Hospital, Akurli Road, Kandivali(E) <br />
+          Engg. Office: 33|73, Kalpataru Avenue, Opp ESIS Hospital, Akurli Road, Kandivali(E) <br />
           Mumbai-400101, Tel: +91 22 4978 1259
         </div>
       </div>

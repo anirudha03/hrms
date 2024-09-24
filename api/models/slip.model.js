@@ -26,6 +26,7 @@ const salarySlipSchema = new Schema({
   td: { type: Number, default: null },
   bl: { type: Number, default: null },
   el: { type: Number, default: null },
+  npd: { type: Number, default: null },
   against_balance: { type: Number, default: 0 },
   doi: { type: String, default: null }
 });
