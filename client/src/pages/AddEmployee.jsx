@@ -15,7 +15,7 @@ export default function AddEmployee() {
     aadhar: "",
     dob: "",
     address: "",
-    home: "rent",
+    home: "permanent",
     bloodgroup: "",
     gender: "male", // Default value set to 'Male'
     mstatus: "single", // Default value set to 'Single'
@@ -36,14 +36,14 @@ export default function AddEmployee() {
     bank_name: "",
     ifsc: "",
     branch: "",
-    holder_name:"",
-    hra:0,
-    lta:0,
-    ta:0,
-    ma:0,
-    mpa:0,
-    sa:0,
-    pfempes:0,    
+    holder_name: "",
+    hra: 0,
+    lta: 0,
+    ta: 0,
+    ma: 0,
+    mpa: 0,
+    sa: 0,
+    pfempes: 0,
   });
   const [departments, setDepartments] = useState([]);
   const [error, setError] = useState(false);
@@ -52,7 +52,6 @@ export default function AddEmployee() {
   // console.log(formData);
 
   useEffect(() => {
-    // Fetch departments when the component mounts
     fetchDepartments();
   }, []);
   const fetchDepartments = async () => {
@@ -101,41 +100,41 @@ export default function AddEmployee() {
       });
     }
     if (
-        e.target.type === 'number' ||
-        e.target.type === 'text' ||
-        e.target.type === 'textarea'
-      ) {
-        setFormData({
-          ...formData,
-          [e.target.id]: e.target.value,
-        });
-      }
-      if (e.target.id === "doj") {
-        // If Date of Joining changes, update bonus date
-        setFormData({
-          ...formData,
-          doj: e.target.value,
-          bonus_date: calculateBonusDate(e.target.value, formData.bonusMonths)
-        });
-      }
-      if (e.target.id === "bonusMonths") {
-        // If the bonus months input changes, update bonus date
-        setFormData({
-          ...formData,
-          bonusMonths: e.target.value,
-          bonus_date: calculateBonusDate(formData.doj, e.target.value)
-        });
-      }
+      e.target.type === 'number' ||
+      e.target.type === 'text' ||
+      e.target.type === 'textarea'
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value,
+      });
+    }
+    if (e.target.id === "doj") {
+      // If Date of Joining changes, update bonus date
+      setFormData({
+        ...formData,
+        doj: e.target.value,
+        bonus_date: calculateBonusDate(e.target.value, formData.bonusMonths)
+      });
+    }
+    if (e.target.id === "bonusMonths") {
+      // If the bonus months input changes, update bonus date
+      setFormData({
+        ...formData,
+        bonusMonths: e.target.value,
+        bonus_date: calculateBonusDate(formData.doj, e.target.value)
+      });
+    }
     else if (e.target.type === "date") {
-        // Convert date to YYYY-MM-DD format
-        const formattedDate = e.target.valueAsDate
-          ? e.target.valueAsDate.toISOString().split("T")[0]
-          : "";
-        setFormData({
-          ...formData,
-          [e.target.id]: formattedDate,
-        });
-      }
+      // Convert date to YYYY-MM-DD format
+      const formattedDate = e.target.valueAsDate
+        ? e.target.valueAsDate.toISOString().split("T")[0]
+        : "";
+      setFormData({
+        ...formData,
+        [e.target.id]: formattedDate,
+      });
+    }
   };
 
   const calculateBonusDate = (doj, bonusMonths) => {
@@ -151,29 +150,29 @@ export default function AddEmployee() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-        setLoading(true);
-        setError(false);
-        const res = await fetch('/api/crud/add', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              ...formData
-            }),
-          });
-          const data = await res.json();
+      setLoading(true);
+      setError(false);
+      const res = await fetch('/api/crud/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData
+        }),
+      });
+      const data = await res.json();
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
-      }else{
+      } else {
         alert("employee successfully added")
       }
       navigate(`/home`);
     }
     catch (error) {
-        setError(error.message);
-        setLoading(false);
+      setError(error.message);
+      setLoading(false);
     }
     console.log(formData);
   };
@@ -183,57 +182,57 @@ export default function AddEmployee() {
       {/* <h1 className="text-3xl font-semibold text-center my-2">Add Employee</h1> */}
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-1">
         <div className="flex flex-col gap-2 flex-1">
-            Employee ID:
-            <input type="text" id="empid" className="border p-1 rounded-sm" onChange={handleChange} value={formData.empid} />
-            First Name:
-            <input type="text" id="fname" className="border p-1 rounded-sm" onChange={handleChange} value={formData.fname} />
-            Middle Name:
-            <input type="text" id="mname" className="border p-1 rounded-sm" onChange={handleChange} value={formData.mname} />
-            Last Name:
-            <input type="text" id="lname" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lname} />
-            Email ID:
-            <input type="text" id="email" className="border p-1 rounded-sm" onChange={handleChange} value={formData.email} />
-            Phone No.:
-            <input type="number" id="phone" className="border p-1 rounded-sm" onChange={handleChange} value={formData.phone} />
-            Aadhar No.:
-            <input type="number" id="aadhar" className="border p-1 rounded-sm" onChange={handleChange} value={formData.aadhar} />
-            Date of Birth:
-            <input type="date" id="dob" className="border p-1 rounded-sm" onChange={handleChange} value={formData.dob} />
-            Address:
-            <textarea type="" id="address" className="border p-1 rounded-sm" onChange={handleChange} value={formData.address} />
-            Home Type:
-            <div className='flex gap-2'>
-              <input type='checkbox'id='permanent'className='w-5'onChange={handleChange}checked={formData.home === 'permanent'}/>
-              <span>Permanent</span>
-              <input type='checkbox'id='rent'className='w-5'onChange={handleChange}checked={formData.home === 'rent'}/>
-              <span>Rental</span>
-            </div>
-            Blood Group:
-            <input type="text" id="bloodgroup" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bloodgroup}/>
-            Gender:
-            <div className='flex gap-2'>
-              <input type='checkbox'id='male'className='w-5'onChange={handleChange}checked={formData.gender === 'male'}/>
-              <span>Male</span>
-              <input type='checkbox'id='female'className='w-5'onChange={handleChange}checked={formData.gender === 'female'}/>
-              <span>Female</span>
-            </div>
-            Marital Status:
-            <div className='flex gap-2'>
-              <input type='checkbox'id='single'className='w-5'onChange={handleChange}checked={formData.mstatus === 'single'}/>
-              <span>Single</span>
-              <input type='checkbox'id='married'className='w-5'onChange={handleChange}checked={formData.mstatus === 'married'}/>
-              <span>Married</span>
-            </div>
-            Passport No.:
-            <input type="number" id="passport" className="border p-1 rounded-sm" onChange={handleChange} value={formData.passport} />
-                        
+          <b> Employee ID:</b>
+          <input type="text" id="empid" className="border p-1 rounded-sm" onChange={handleChange} value={formData.empid} />
+          First Name:
+          <input type="text" id="fname" className="border p-1 rounded-sm" onChange={handleChange} value={formData.fname} />
+          Middle Name:
+          <input type="text" id="mname" className="border p-1 rounded-sm" onChange={handleChange} value={formData.mname} />
+          Last Name:
+          <input type="text" id="lname" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lname} />
+          Email ID:
+          <input type="text" id="email" className="border p-1 rounded-sm" onChange={handleChange} value={formData.email} />
+          Phone No.:
+          <input type="number" id="phone" className="border p-1 rounded-sm" onChange={handleChange} value={formData.phone} />
+          Aadhar No.:
+          <input type="number" id="aadhar" className="border p-1 rounded-sm" onChange={handleChange} value={formData.aadhar} />
+          Date of Birth:
+          <input type="date" id="dob" className="border p-1 rounded-sm" onChange={handleChange} value={formData.dob} />
+          Address:
+          <textarea type="" id="address" className="border p-1 rounded-sm" onChange={handleChange} value={formData.address} />
+          Home Type:
+          <div className="flex gap-2">
+            <select id="home" className="border p-1 rounded-sm" onChange={handleChange} value={formData.home}>
+              <option value="permanent">Permanent</option>
+              <option value="rent">Rental</option>
+            </select>
+          </div>
+          Blood Group:
+          <input type="text" id="bloodgroup" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bloodgroup} />
+          Gender:
+          <div className="flex gap-2">
+            <select id="gender" className="border p-1 rounded-sm" onChange={handleChange} value={formData.gender}>
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          Marital Status:
+          <div className="flex gap-2">
+            <select id="mstatus" className="border p-1 rounded-sm" onChange={handleChange} value={formData.mstatus}>
+              <option value="single">Single</option>
+              <option value="married">Married</option>
+            </select>
+          </div>
+          Passport No:
+          <input type="text" id="passport" className="border p-1 rounded-sm" onChange={handleChange} value={formData.passport} />
         </div>
         <div className='flex flex-col flex-1 gap-2'>
-        Degree:
-            <input type="text" id="degree" className="border p-1 rounded-sm" onChange={handleChange} value={formData.degree} />
-            Post:
-            <input type="text" id="post" className="border p-1 rounded-sm" onChange={handleChange} value={formData.post} />
-            Department:
+          Degree:
+          <input type="text" id="degree" className="border p-1 rounded-sm" onChange={handleChange} value={formData.degree} />
+          Post:
+          <input type="text" id="post" className="border p-1 rounded-sm" onChange={handleChange} value={formData.post} />
+          Department:
           <select id="department" className="border p-1 rounded-sm" onChange={handleChange} value={formData.department}>
             <option value="">Select Department</option>
             {departments.map(department => (
@@ -241,59 +240,58 @@ export default function AddEmployee() {
             ))}
           </select>
           Basic Salary:
-            <input type="number" id="bsalary" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bsalary} />
-            Status:
-            <div className='flex gap-2'>
-              <input type='checkbox'id='active'className='w-5'onChange={handleChange}checked={formData.status === 'active'}/>
-              <span>Active</span>
-              <input type='checkbox'id='inactive'className='w-5'onChange={handleChange}checked={formData.status === 'inactive'}/>
-              <span>Inactive</span>
-              <input type='checkbox'id='resigned'className='w-5'onChange={handleChange}checked={formData.status === 'resigned'}/>
-              <span>Resigned</span>
-            </div>
+          <input type="number" id="bsalary" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bsalary} />
+          Status:
+          <div className="flex gap-2">
+            <select id="status" className="border p-1 rounded-sm" onChange={handleChange} value={formData.status}>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="resigned">Resigned</option>
+            </select>
+          </div>
 
-            Date of joining:
-            <input type="date" id="doj" className="border p-1 rounded-sm" onChange={handleChange} value={formData.doj} />
-            Bonus Months:
-            <input type="number" id="bonusMonths" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonusMonths} />
-            Date of Probation:
-            <input type="date" id="bonus_date" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonus_date} />
-            Leave Balance:
-            <input type="number" id="leave_balance" className="border p-1 rounded-sm" onChange={handleChange} value={formData.leave_balance} />
-            Password:
-            <input type="text" id="password" className="border p-1 rounded-sm" onChange={handleChange} value={formData.password} />
+          <b>Date of joining:</b>
+          <input type="date" id="doj" className="border p-1 rounded-sm" onChange={handleChange} value={formData.doj} />
+          Probation Months:
+          <input type="number" id="bonusMonths" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonusMonths} />
+          Date of Probation:
+          <input type="date" id="bonus_date" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bonus_date} />
+          Leave Balance:
+          <input type="number" id="leave_balance" className="border p-1 rounded-sm" onChange={handleChange} value={formData.leave_balance} />
+          <b>Password:</b>
+          <input type="text" id="password" className="border p-1 rounded-sm" onChange={handleChange} value={formData.password} />
 
-            Pancard No.:
-            <input type="text" id="pancard" className="border p-1 rounded-sm" onChange={handleChange} value={formData.pancard}/>
-            Account Number:
-            <input type="text" id="accno" className="border p-1 rounded-sm" onChange={handleChange} value={formData.accno}/>            
-            Bank Name:
-            <input type="text" id="bank_name" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bank_name}/>
-            Branch Name:
-            <input type="text" id="branch" className="border p-1 rounded-sm" onChange={handleChange} value={formData.branch}/>
-            IFSC code:
-            <input type="text" id="ifsc" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ifsc}/>    
-            Account Holder Name:
-            <input type="text" id="holder_name" className="border p-1 rounded-sm" onChange={handleChange} value={formData.holder_name}/>    
+          <b> Pancard No.:</b>
+          <input type="text" id="pancard" className="border p-1 rounded-sm" onChange={handleChange} value={formData.pancard} />
+          <b> Account Number:</b>
+          <input type="text" id="accno" className="border p-1 rounded-sm" onChange={handleChange} value={formData.accno} />
+          <b> Bank Name:</b>
+          <input type="text" id="bank_name" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bank_name} />
+          <b> Branch Name:</b>
+          <input type="text" id="branch" className="border p-1 rounded-sm" onChange={handleChange} value={formData.branch} />
+          <b> IFSC code:</b>
+          <input type="text" id="ifsc" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ifsc} />
+          <b> Account Holder Name:</b>
+          <input type="text" id="holder_name" className="border p-1 rounded-sm" onChange={handleChange} value={formData.holder_name} />
 
 
-            house and rental allowance:
-            <input type="number" id="hra" className="border p-1 rounded-sm" onChange={handleChange} value={formData.hra} />
-            Travel Alowance:
-            <input type="number" id="ta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ta} />
-            Special Alowance:
-            <input type="number" id="sa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.sa} />
-            Medical Alowance:
-            <input type="number" id="ma" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ma} />
-            Mediclaim:
-            <input type="number" id="mpa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.mpa} />
-            Leave Travel Alowance:
-            <input type="number" id="lta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lta} />
-            PF Employee:
-            <input type="number" id="pfempes" className="border p-1 rounded-sm" onChange={handleChange} value={formData.pfempes} />      
+          house and rental allowance:
+          <input type="number" id="hra" className="border p-1 rounded-sm" onChange={handleChange} value={formData.hra} />
+          Travel Allowance:
+          <input type="number" id="ta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ta} />
+          Special Allowance:
+          <input type="number" id="sa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.sa} />
+          Medical Allowance:
+          <input type="number" id="ma" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ma} />
+          Mediclaim & PA:
+          <input type="number" id="mpa" className="border p-1 rounded-sm" onChange={handleChange} value={formData.mpa} />
+          Leave Travel Allowance:
+          <input type="number" id="lta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.lta} />
+          PF Employee:
+          <input type="number" id="pfempes" className="border p-1 rounded-sm" onChange={handleChange} value={formData.pfempes} />
         </div>
-        </form>
-        <div className="flex justify-center ">
+      </form>
+      <div className="flex justify-center ">
         <button
           disabled={loading}
           onClick={handleSubmit}

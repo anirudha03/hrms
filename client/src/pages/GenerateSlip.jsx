@@ -250,7 +250,7 @@ const handleSubmit = async (e) => {
                 <label htmlFor="pfemper" className="m-1">PF@Employer:</label>
                 <label htmlFor="pfempes" className="m-1">PF@Employees:</label>
                 <label htmlFor="pfempes" className="m-1">Mediclaim & PA:</label>
-                <label htmlFor="totded" className="m-2">Gross Deductions:</label>
+                <label htmlFor="totded" className="m-2">Total Deductions:</label>
                 <hr />
                 <label htmlFor="totsal" className="m-2">Net Salary:</label>
               </div>

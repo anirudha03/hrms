@@ -140,10 +140,10 @@ export default function SearchEmployee() {
                 <input type='checkbox'id='single'className='w-5'checked={formData.mstatus === 'single'}/>
                 <span>Single</span>
                 <input type='checkbox'id='married'className='w-5'checked={formData.mstatus === 'married'}/>
-                <span>Female</span>
+                <span>Married</span>
               </div>
               Passport No.:
-              <input type="number" id="passport" className="border p-1 rounded-sm"  value={formData.passport} />
+              <input type="text" id="passport" className="border p-1 rounded-sm"  value={formData.passport} />
                           
           </div>
           <div className='flex flex-col flex-1 gap-2'>
@@ -184,21 +184,20 @@ export default function SearchEmployee() {
             Account Holder Name:
             <input type="text" id="holder_name" className="border p-1 rounded-sm"  value={bankData.data? bankData.data.holder_name:''}/> 
             <hr />
-            house and rental allowance:
+            House Rent Allowance:
               <input type="number" id="hra" className="border p-1 rounded-sm" value={formData.hra} />
-              Travel Alowance:
+              Travel Allowance:
               <input type="number" id="ta" className="border p-1 rounded-sm" value={formData.ta} />
-              Special Alowance:
+              Special Allowance:
               <input type="number" id="sa" className="border p-1 rounded-sm" value={formData.sa} />
-              Medical Alowance:
+              Medical Allowance:
               <input type="number" id="ma" className="border p-1 rounded-sm" value={formData.ma} />
-              Medical Alowance:
+              Mediclaim & PA:
               <input type="number" id="mpa" className="border p-1 rounded-sm" value={formData.mpa} />
-              Leave Travel Alowance:
+              Leave Travel Allowance:
               <input type="number" id="lta" className="border p-1 rounded-sm" value={formData.lta} />
               PF Employee:
               <input type="number" id="pfempes" className="border p-1 rounded-sm" value={formData.pfempes} />
-          
           </div>
           </form>
           <div className="flex justify-center ">
