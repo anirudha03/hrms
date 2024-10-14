@@ -23,7 +23,7 @@ export default function GenerateSlip() {
     mpa: 0,
     lta: 0,
     totearn: 0,
-    ptax: 0,
+    ptax: 200,
     pfemper: 0,
     pfempes: 0,
     totded: 0,

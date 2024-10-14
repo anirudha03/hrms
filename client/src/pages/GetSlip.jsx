@@ -18,6 +18,18 @@ const GetSlip = () => {
     return <div>Loading...</div>;
   }
 
+  const formatMonth = (monthString) => {
+    const [year, month] = monthString.split("-");
+    const date = new Date(year, month - 1); // Month is zero-indexed in JavaScript
+    const formattedMonth = date.toLocaleString("en-US", { month: "short" });
+    const formattedYear = date.toLocaleString("en-US", { year: "2-digit" });
+    return `${formattedMonth}-${formattedYear}`;
+  };
+
+  if (!slip) {
+    return <div>Loading...</div>;
+  } 
+
   return (
     <div className="mx-auto">
       <div className="flex justify-between">
@@ -53,7 +65,7 @@ const GetSlip = () => {
           </tr>
           <tr>
             <td className="px-4 py-2">Month:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.month}</td>
+            <td className="px-4 py-1 rounded-lg border border-gray-300">{formatMonth(slip.month)}</td>
           </tr>
           {/* <tr className="h-2"></tr> Adding space between sections */}
           <tr><td><span className=" px-2 font-bold underline">SALARY DETAILS</span></td></tr>

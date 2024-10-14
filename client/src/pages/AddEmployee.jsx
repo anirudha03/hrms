@@ -239,8 +239,7 @@ export default function AddEmployee() {
               <option key={department} value={department}>{department}</option>
             ))}
           </select>
-          Basic Salary:
-          <input type="number" id="bsalary" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bsalary} />
+
           Status:
           <div className="flex gap-2">
             <select id="status" className="border p-1 rounded-sm" onChange={handleChange} value={formData.status}>
@@ -274,8 +273,9 @@ export default function AddEmployee() {
           <b> Account Holder Name:</b>
           <input type="text" id="holder_name" className="border p-1 rounded-sm" onChange={handleChange} value={formData.holder_name} />
 
-
-          house and rental allowance:
+          Basic Salary:
+          <input type="number" id="bsalary" className="border p-1 rounded-sm" onChange={handleChange} value={formData.bsalary} />
+          House Rent allowance:
           <input type="number" id="hra" className="border p-1 rounded-sm" onChange={handleChange} value={formData.hra} />
           Travel Allowance:
           <input type="number" id="ta" className="border p-1 rounded-sm" onChange={handleChange} value={formData.ta} />

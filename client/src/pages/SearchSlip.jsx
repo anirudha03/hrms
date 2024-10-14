@@ -5,7 +5,7 @@ const SearchSlip = () => {
   const [slips, setSlips] = useState([]);
   const [searchEmpId, setSearchEmpId] = useState('');
   const [searchMonth, setSearchMonth] = useState('');
-
+  
   useEffect(() => {
     fetch('/api/slip/get-slip')
       .then(response => response.json())
@@ -16,6 +16,25 @@ const SearchSlip = () => {
       .catch(error => console.error('Error fetching slips:', error));
   }, []);
 
+  // Handle delete slip
+  const handleDelete = (empRef, month) => {
+    if (window.confirm(`Are you sure you want to delete the slip for Employee ${empRef} for the month of ${month}?`)) {
+      fetch(`/api/slip/delete-slip/${empRef}/${month}`, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (response.ok) {
+          // Update the list after deletion
+          setSlips(prevSlips => prevSlips.filter(slip => !(slip.empRef === empRef && slip.month === month)));
+        } else {
+          console.error('Error deleting slip');
+        }
+      })
+      .catch(error => console.error('Error deleting slip:', error));
+    }
+  };
+
+  // Filter slips based on search input
   const filteredSlips = slips.filter(slip => {
     return slip.empRef.toLowerCase().includes(searchEmpId.toLowerCase()) &&
            slip.month.toLowerCase().includes(searchMonth.toLowerCase());
@@ -38,7 +57,6 @@ const SearchSlip = () => {
           onChange={e => setSearchMonth(e.target.value)}
           className="px-2 py-1 border rounded-md"
         />
-        {/* <button className="p-1.5 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 ml-2">Search</button> */}
       </div>
       <table className="w-full border-collapse">
         <thead>
@@ -48,6 +66,7 @@ const SearchSlip = () => {
             <th className="px-2 py-1 text-center">Total Salary</th>
             <th className="px-2 py-1 text-center">Date of Issue</th>
             <th className="px-2 py-1 text-center">Action</th>
+            <th className="px-2 py-1 text-center"></th>
           </tr>
         </thead>
         <tbody>
@@ -59,8 +78,16 @@ const SearchSlip = () => {
               <td className="px-2 py-1 text-center">{slip.doi}</td>
               <td className="px-2 py-1 text-center">
                 <Link className="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600" to={`/get-slip/${slip.empRef}/${slip.month}`}>
-                  View Details
+                  View
                 </Link>
+              </td>
+              <td className="px-2 py-1 text-center">
+                <button
+                  className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={() => handleDelete(slip.empRef, slip.month)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

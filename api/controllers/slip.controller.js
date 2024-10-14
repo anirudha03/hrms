@@ -62,9 +62,27 @@ export const getSlipsEmp = async (req, res) => {
     }
 };
 
+export const deleteSlip = async (req, res) => {
+    const { empid, month } = req.params;
+    const empRef = empid;
+    try {
+      const slip = await Slip.findOne({ empRef, month });
+  
+      if (!slip) {
+        return res.status(404).json({ message: 'Slip not found' });
+      }
+      await Slip.findOneAndDelete({ empRef, month });
+  
+      res.status(200).json({ message: 'Slip deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting slip', error });
+    }
+  };
+
 export const updateSlip = async (req, res) => {
     try {
         const { empid, month } = req.params;
+        console.log(empid,month);
         const updateFields = req.body;
 
         const updatedSlip = await Slip.findOneAndUpdate({ empRef: empid, month: month }, updateFields, { new: true });
