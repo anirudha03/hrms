@@ -17,6 +17,14 @@ const GetSlip = () => {
   if (!slip) {
     return <div>Loading...</div>;
   }
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   const formatMonth = (monthString) => {
     const [year, month] = monthString.split("-");
@@ -39,7 +47,7 @@ const GetSlip = () => {
         </div>
         <div className="mt-2 ml-4 font-semibold text-right text-blue-800">
           Rev. 01 <br />
-          DOI : {slip.doi} <br />
+          DOI : {formatDate(slip.doi)} <br />
           RESTRICTED
         </div>
       </div>
@@ -61,7 +69,7 @@ const GetSlip = () => {
           </tr>
           <tr>
             <td className="px-4 py-2">Date of Joining:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.djoin}</td>
+            <td className="px-4 py-1 rounded-lg border border-gray-300">{formatDate(slip.djoin)}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Month:</td>
