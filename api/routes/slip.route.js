@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/add-slip",verifyToken, addSlip); 
 router.post("/update-slip/:empid/:month",verifyToken, updateSlip); 
-router.get("/get-slip/:empid/:month",verifyToken , getSlip); 
+router.get("/get-slip/:empid/:month" , getSlip); 
 router.get("/get-slip",verifyToken , getSlips); 
 router.get('/getEmpMonth/:empid/:month',verifyToken,getEmpMonth);
 router.delete("/delete-slip/:empid/:month", verifyToken, deleteSlip);

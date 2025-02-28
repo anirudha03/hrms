@@ -69,72 +69,20 @@ export default function AddEmployee() {
   };
 
   const handleChange = (e) => {
-    if (e.target.id === "male" || e.target.id === "female") {
-      setFormData({
-        ...formData,
-        gender: e.target.id,
-      });
-    }
-    if (e.target.id === "permanent" || e.target.id === "rent") {
-      setFormData({
-        ...formData,
-        home: e.target.id,
-      });
-    }
-    if (e.target.id === "department") {
-      setFormData({
-        ...formData,
-        department: e.target.value,
-      });
-    }
-    if (e.target.id === "married" || e.target.id === "single") {
-      setFormData({
-        ...formData,
-        mstatus: e.target.id,
-      });
-    }
-    if (e.target.id === "active" || e.target.id === "inactive" || e.target.id === "resigned") {
-      setFormData({
-        ...formData,
-        status: e.target.id,
-      });
-    }
-    if (
-      e.target.type === 'number' ||
-      e.target.type === 'text' ||
-      e.target.type === 'textarea'
-    ) {
-      setFormData({
-        ...formData,
-        [e.target.id]: e.target.value,
-      });
-    }
-    if (e.target.id === "doj") {
-      // If Date of Joining changes, update bonus date
-      setFormData({
-        ...formData,
-        doj: e.target.value,
-        bonus_date: calculateBonusDate(e.target.value, formData.bonusMonths)
-      });
-    }
-    if (e.target.id === "bonusMonths") {
-      // If the bonus months input changes, update bonus date
-      setFormData({
-        ...formData,
-        bonusMonths: e.target.value,
-        bonus_date: calculateBonusDate(formData.doj, e.target.value)
-      });
-    }
-    else if (e.target.type === "date") {
-      // Convert date to YYYY-MM-DD format
-      const formattedDate = e.target.valueAsDate
-        ? e.target.valueAsDate.toISOString().split("T")[0]
-        : "";
-      setFormData({
-        ...formData,
-        [e.target.id]: formattedDate,
-      });
-    }
+    const { id, value, type } = e.target;
+  
+    setFormData((prevFormData) => {
+      let updatedData = { ...prevFormData, [id]: value };
+  
+      if (id === "doj" || id === "bonusMonths") {
+        updatedData.bonus_date = calculateBonusDate(
+          id === "doj" ? value : prevFormData.doj,
+          id === "bonusMonths" ? value : prevFormData.bonusMonths
+        );
+      }
+  
+      return updatedData;
+    });
   };
 
   const calculateBonusDate = (doj, bonusMonths) => {

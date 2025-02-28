@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function EmpSlips({ empid }) {
     const [slips, setSlips] = useState([]);
 
     useEffect(() => {
+        // console.log(empid);
         fetch(`/api/employee-auth/emp-slips/${empid}`)
             .then(response => response.json())
             .then(data => {
@@ -29,7 +31,14 @@ export default function EmpSlips({ empid }) {
                 <tbody>
                     {slips.map((slip, index) => (
                         <tr key={index} className="border-t border-gray-200">
-                            <td className="py-2 px-4 text-sm text-center"><button className='bg-slate-500 text-white py-1 px-2 rounded'>{slip.doi}</button></td>
+                            <td className="py-2 px-4 text-sm text-center">
+                                <Link
+                                    className="px-2 py-1 bg-slate-400 text-white rounded-md hover:bg-slate-500 hover:scale-1"
+                                    to={`/get-slip/${empid}/${slip.month}`}
+                                >
+                                    {slip.doi}
+                                </Link>
+                            </td>
                             <td className="py-2 px-4 text-sm text-center">{slip.month}</td>
                             <td className="py-2 px-4 text-sm text-center">{slip.totsal}</td>
                         </tr>
