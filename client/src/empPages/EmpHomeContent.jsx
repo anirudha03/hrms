@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import EmpSlips from '../components/EmpSlips';
 import EmpLeaves from '../components/EmpLeaves';
+import axios from 'axios';
 
 export default function EmpHomeContent() {
     const { currentUserEmp } = useSelector((state) => state.employee);
+    const [leaveBalance, setLeaveBalance] = useState(0);
+
+    useEffect(() => {
+        const fetchLeaveBalance = async () => {
+            try {
+                const response = await axios.post('/api/employee-auth/getLeaveBalance', { empid: currentUserEmp.empid });
+                setLeaveBalance(response.data.leave_balance);
+            } catch (error) {
+                console.error('Error fetching leave balance:', error);
+            }
+        };
+        
+        fetchLeaveBalance();
+    }, [currentUserEmp.empid]);
 
     return (
         <div>
@@ -13,7 +28,7 @@ export default function EmpHomeContent() {
             <span className='font-bold'>{currentUserEmp.empid}</span><div/>
             <span className='font-bold'>{currentUserEmp.department}</span><div/>
             <span className='font-bold'>{currentUserEmp.post}</span><div/>
-            Leave Balance: <span className='font-bold'>{currentUserEmp.leave_balance}</span> <div/>
+            Leave Balance: <span className='font-bold'>{leaveBalance}</span> <div/>
             <br />
             <hr />
             <div className="flex flex-col lg:flex-row">

@@ -4,6 +4,17 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
+export const getLeaveBalance = async (req, res, next) => {
+  const { empid } = req.body;
+  try {
+    const employee = await Employee.findOne({ empid: empid });
+    if (!employee) return next(errorHandler(404, "Employee not found"));
+    
+    res.status(200).json({ leave_balance: employee.leave_balance });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const signin = async (req, res, next) => {
   const { empid, password } = req.body;
@@ -59,5 +70,6 @@ export const viewData = async (req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
