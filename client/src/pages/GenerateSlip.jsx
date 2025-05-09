@@ -155,18 +155,12 @@ export default function GenerateSlip() {
     const td = data.bl + data.lt - data.against_balance;
     
     const gross_salary = (data.bsal + data.hra + data.cca)*(data.npd/data.month_days);
-    const ctc = (data.bsal + data.hra + data.cca) + data.pfemper + data.mpa;
+    const ctc = gross_salary + data.pfemper + data.mpa;
     const total_deductions = data.pfempes + data.pfemper + data.mpa + data.ptax;
     const net_salary = ctc - total_deductions;
-    const net_take_home = gross_salary;
-    let final_salary = 0
-
-    if (data.npd/data.month_days < 1){
-      final_salary = gross_salary;      
-    }
-    else{
-      final_salary = net_salary
-    }
+    // const net_take_home = gross_salary;
+    const final_salary = net_salary
+    
     // gross salary = (23500 + 10500 + 45500)/30*15
     // ctc = (23500 + 10500 + 45500) + 1800(epployer) + 679(mpa) 
     // total deductions = employee_1800 + employer_1800 + pt(200) +mpa (679)
