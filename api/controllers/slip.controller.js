@@ -4,9 +4,13 @@ import Employee from '../models/employee.model.js';
 import Leave from '../models/leave.model.js';
 
 export const addSlip = async (req, res) => {
-    const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, mpa, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi, npd } = req.body;
+    // const { empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, mpa, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi, npd } = req.body;
     
-    const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, mpa, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi, npd });
+    // const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, ta, sa, ma, mpa, lta, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi, npd });
+
+    const { empRef, month, ename, des, djoin, bsal, hra, mpa, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi, npd, cca } = req.body;
+    
+    const newSlip = new Slip({ empRef, month, ename, des, djoin, bsal, hra, mpa, totearn, ptax, pfemper, pfempes, totded, totsal, al, lt, td, bl, el, doi, npd, cca });
 
     try {
         const savedSlip = await newSlip.save();
@@ -97,21 +101,10 @@ export const updateSlip = async (req, res) => {
     }
 };
 
+
 export const getEmpMonth = async (req, res) => {
     try {
         const { empid, month } = req.params;
-
-        const [year, monthStr] = month.split('-');
-        const monthNumber = parseInt(monthStr);
-
-        let prevMonthNumber = monthNumber - 1;
-        let prevYear = year;
-
-        if (prevMonthNumber === 0) {
-            prevMonthNumber = 12;
-            prevYear = parseInt(year) - 1;
-        }
-        const prevMonth = `${prevYear}-${prevMonthNumber.toString().padStart(2, '0')}`;
 
         const employee = await Employee.findOne({ empid });
 
@@ -119,13 +112,14 @@ export const getEmpMonth = async (req, res) => {
             return res.status(404).json({ error: 'Employee not found' });
         }
 
-        const leaves = await Leave.find({ empRef: empid, month: prevMonth, status: "approved" });
+        const leaves = await Leave.find({ empRef: empid, month: month, status: "approved" });
 
         let totalDays = 0;
-        let againstBalance = 0; // Initialize against_balance
+        let againstBalance = 0;
+
         leaves.forEach(leave => {
             totalDays += leave.days;
-            againstBalance += leave.against_balance || 0; // Add against_balance
+            againstBalance += leave.against_balance || 0;
         });
 
         const result = {
@@ -138,7 +132,7 @@ export const getEmpMonth = async (req, res) => {
             month: month,
             totalDays: totalDays,
             balance: employee.leave_balance,
-            against_balance: againstBalance, 
+            against_balance: againstBalance,
             hra: employee.hra,
             lta: employee.lta,
             ta: employee.ta,
@@ -155,3 +149,64 @@ export const getEmpMonth = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
+// ## PREVIOUS MONTH LOGIC BELOW ###################################
+
+// export const getEmpMonth = async (req, res) => {
+//     try {
+//         const { empid, month } = req.params;
+
+//         const [year, monthStr] = month.split('-');
+//         const monthNumber = parseInt(monthStr);
+
+//         let prevMonthNumber = monthNumber - 1;
+//         let prevYear = year;
+
+//         if (prevMonthNumber === 0) {
+//             prevMonthNumber = 12;
+//             prevYear = parseInt(year) - 1;
+//         }
+//         const prevMonth = `${prevYear}-${prevMonthNumber.toString().padStart(2, '0')}`;
+
+//         const employee = await Employee.findOne({ empid });
+
+//         if (!employee) {
+//             return res.status(404).json({ error: 'Employee not found' });
+//         }
+
+//         const leaves = await Leave.find({ empRef: empid, month: prevMonth, status: "approved" });
+
+//         let totalDays = 0;
+//         let againstBalance = 0; // Initialize against_balance
+//         leaves.forEach(leave => {
+//             totalDays += leave.days;
+//             againstBalance += leave.against_balance || 0; // Add against_balance
+//         });
+
+//         const result = {
+//             empid: employee.empid,
+//             fname: employee.fname,
+//             lname: employee.lname,
+//             doj: employee.doj,
+//             post: employee.post,
+//             bsalary: employee.bsalary,
+//             month: month,
+//             totalDays: totalDays,
+//             balance: employee.leave_balance,
+//             against_balance: againstBalance, 
+//             hra: employee.hra,
+//             lta: employee.lta,
+//             ta: employee.ta,
+//             ma: employee.ma,
+//             mpa: employee.mpa,
+//             sa: employee.sa,
+//             pfempes: employee.pfempes,
+//             bonus_date: employee.bonus_date,
+//         };
+
+//         res.json(result);
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// }

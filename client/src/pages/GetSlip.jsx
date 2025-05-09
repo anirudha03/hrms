@@ -91,40 +91,40 @@ const GetSlip = () => {
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.pfemper}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Travel Allowance:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.ta}</td>
+            <td className="px-4 py-2">City Compensatory Allowance:</td>
+            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.cca}</td>
             <td className="px-4 py-2">PF@Employees:</td>
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.pfempes}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Special Allowance:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.sa}</td>
+            <td className="px-4 py-2">Mediclaim & PA:</td>
+            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.mpa}</td>
             <td className="px-4 py-2">Mediclaim & PA:</td>
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.mpa}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Medical Allowance:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.ma}</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Mediclaim & PA:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.mpa}</td>
             <td></td>
             <td></td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Leave Travel Allowance:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.lta}</td>
-            <td className="px-4 py-2">Total Deductions:</td>
-            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.totded}</td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <td className="px-4 py-2">Gross Salary:</td>
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.totearn}</td>
+            <td className="px-4 py-2">Total Deductions:</td>
+            <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.totded}</td>
+          </tr>
+          <tr>
             <td className="px-4 py-2">Net Salary:</td>
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.totsal}</td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <td>
@@ -152,7 +152,7 @@ const GetSlip = () => {
           </tr>
         </tbody>
       </table>
-      <div className="mt-5 text-slate-950">
+      <div className="mt-24 text-slate-950">
         Note: Encashment of leaves will be done in the month of March of the current Financial year.
       </div>
       <p className="mt-0 mb-3 text-orange-600"> This is digitally generated slip, signature is not required</p>

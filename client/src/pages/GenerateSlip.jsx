@@ -18,12 +18,12 @@ export default function GenerateSlip() {
     ta: 0,
     sa: 0,
     ma: 0,
-    mpa: 0,
+    mpa: 679,
     lta: 0,
     totearn: 0,
     ptax: 200,
-    pfemper: 0,
-    pfempes: 0,
+    pfemper: 1800,
+    pfempes: 1800,
     totded: 0,
     totsal: 0,
     al: 0,
@@ -36,6 +36,7 @@ export default function GenerateSlip() {
     against_balance: 0,
     bonus_date: "",
     month_days: 0, // New variable for total days in the previous month
+    cca: 0,
   });
 
   const getEmployeeInfo = async (e) => {
@@ -100,16 +101,16 @@ export default function GenerateSlip() {
   useEffect(() => {
     if (empSearch.month) {
       const [year, month] = empSearch.month.split("-").map(Number);
-      const previousMonth = new Date(year, month - 1, 0); // Get the last day of the previous month
-      const daysInPreviousMonth = previousMonth.getDate(); // Get the number of days
+      const daysInMonth = new Date(year, month, 0).getDate(); // Corrected for current month
       setData((prevData) => ({
         ...prevData,
-        month_days: daysInPreviousMonth,
-        npd: daysInPreviousMonth,
+        month_days: daysInMonth,
+        npd: daysInMonth - prevData.against_balance,
       }));
-      console.log("daysInPreviousMonth",daysInPreviousMonth)     
+      console.log("daysInMonth", daysInMonth);
     }
-  }, [empSearch.month]);
+  }, [empSearch.month, data.against_balance]);
+  
 
   useEffect(() => {
     console.log("Current npd value:", data.npd);
@@ -147,16 +148,35 @@ export default function GenerateSlip() {
   };
 
   const calculateTotals = () => {
-    const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta + data.mpa;
-    const totalDeductions = data.ptax + data.pfemper + data.pfempes + data.mpa;
-    const totalSalary = (totalEarnings - totalDeductions)*data.npd/data.month_days;
+    // const totalEarnings = data.bsal + data.hra + data.ta + data.sa + data.ma + data.lta + data.mpa;
+    const totalEarnings = data.bsal + data.hra + data.cca + data.mpa + data.pfemper;
+    const totalDeductions = data.ptax  + data.pfempes + data.mpa + data.pfemper;
+    const totalSalary = (data.bsal + data.hra + data.cca)*(data.npd/data.month_days)  + data.pfemper + data.mpa - totalDeductions;
     const td = data.bl + data.lt - data.against_balance;
+    
+    const gross_salary = (data.bsal + data.hra + data.cca)*(data.npd/data.month_days);
+    const ctc = (data.bsal + data.hra + data.cca) + data.pfemper + data.mpa;
+    const total_deductions = data.pfempes + data.pfemper + data.mpa + data.ptax;
+    const net_salary = ctc - total_deductions;
+    const net_take_home = gross_salary;
+    let final_salary = 0
 
+    if (data.npd/data.month_days < 1){
+      final_salary = gross_salary;      
+    }
+    else{
+      final_salary = net_salary
+    }
+    // gross salary = (23500 + 10500 + 45500)/30*15
+    // ctc = (23500 + 10500 + 45500) + 1800(epployer) + 679(mpa) 
+    // total deductions = employee_1800 + employer_1800 + pt(200) +mpa (679)
+    // net salary = ctc - total deduction = 81979 - 4479
+    // net take home = gross salary 
     setData({
       ...data,
-      totearn: totalEarnings,
-      totded: totalDeductions,
-      totsal: totalSalary,
+      totearn: ctc,
+      totded: total_deductions,
+      totsal: final_salary,
       td: td,
     });
   };
@@ -245,12 +265,15 @@ export default function GenerateSlip() {
               <div className="flex flex-col gap-2 flex-1">
                 <label htmlFor="bsal" className="m-1">Basic:</label>
                 <label htmlFor="hra" className="m-1">House Rent Allowance:</label>
-                <label htmlFor="ta" className="m-1">Travel Allowance:</label>
-                <label htmlFor="sa" className="m-1">Special Allowance:</label>
-                <label htmlFor="ma" className="m-2">Medical Allowance:</label>
-                <label htmlFor="ma" className="m-2">Mediclaim & PA:</label>
-                <label htmlFor="lta" className="m-1">Leave Travel Allowance:</label>
-                <label htmlFor="totearn" className="m-1">Gross Earnings:</label>
+                {/* <label htmlFor="ta" className="m-1">Travel Allowance:</label> */}
+                {/* <label htmlFor="sa" className="m-1">Special Allowance:</label> */}
+                {/* <label htmlFor="ma" className="m-2">Medical Allowance:</label> */}
+                <label htmlFor="cca" className="m-1">City Compensatory Allowance:</label>
+                <label htmlFor="pfemper" className="m-1">PF@Employer:</label>
+                <label htmlFor="ma" className="m-2">Mediclaim & PA:</label>                       
+                
+                {/* <label htmlFor="lta" className="m-1">Leave Travel Allowance:</label> */}
+                <label htmlFor="totearn" className="m-1">CTC:</label>
                 <br />
                 <label htmlFor="ptax" className="m-2">Professional Tax:</label>
                 <label htmlFor="pfemper" className="m-1">PF@Employer:</label>
@@ -263,11 +286,13 @@ export default function GenerateSlip() {
               <div className="flex flex-col gap-2 flex-1">
                 <input type="number" name="bsal" id="bsal" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.bsal} />
                 <input type="number" name="hra" id="hra" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.hra} />
-                <input type="number" name="ta" id="ta" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.ta} />
+                {/* <input type="number" name="ta" id="ta" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.ta} />
                 <input type="number" name="sa" id="sa" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.sa} />
-                <input type="number" name="ma" id="ma" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.ma} />
+                <input type="number" name="ma" id="ma" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.ma} /> */}
+                <input type="number" name="cca" id="cca" className="border p-1 rounded-sm mb-7" onChange={handleFormChange} value={data.cca} />
+                <input type="number" name="pfemper" id="pfemper" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.pfemper} />
                 <input type="number" name="mpa" id="mpa" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.mpa} />
-                <input type="number" name="lta" id="lta" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.lta} />
+                {/* <input type="number" name="lta" id="lta" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.lta} /> */}
                 <input type="number" name="totearn" id="totearn" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.totearn} />
                 <br />
                 <input type="number" name="ptax" id="ptax" className="border p-1 rounded-sm" onChange={handleFormChange} value={data.ptax} />

@@ -28,7 +28,8 @@ const salarySlipSchema = new Schema({
   el: { type: Number, default: null },
   npd: { type: Number, default: null },
   against_balance: { type: Number, default: 0 },
-  doi: { type: String, default: null }
+  doi: { type: String, default: null }, 
+  cca : { type: Number, default: 0 }
 });
 
 salarySlipSchema.index({ empRef: 1, month: 1 }, { unique: true });
