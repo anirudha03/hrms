@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { IoPersonAdd, IoHomeSharp } from "react-icons/io5";
 import { GrDocumentUpdate, GrView } from "react-icons/gr";
 import { FaSearch, FaListUl } from "react-icons/fa";
-import { BsBank2 } from "react-icons/bs";
+import { BsBank2, BsCalendarEvent } from "react-icons/bs";
 import { AiTwotoneFileAdd } from "react-icons/ai";
 import { HiDocumentSearch } from "react-icons/hi";
 import { RiDeleteBin5Fill } from "react-icons/ri";
@@ -45,6 +45,11 @@ export default function Sidebar() {
         <Link to="/home/view-all-leaves">
           <li className="mb-2 rounded-md p-2 bg-blue-100 hover:bg-blue-200 transition-colors duration-300">
             <span className="text-blue-600 hover:text-blue-800 flex gap-3"><GrView className='mt-1'/>View Leaves</span>
+          </li>
+        </Link>
+        <Link to="/home/leave-calendar">
+          <li className="mb-2 rounded-md p-2 bg-blue-100 hover:bg-blue-200 transition-colors duration-300">
+            <span className="text-blue-600 hover:text-blue-800 flex gap-3"><BsCalendarEvent className='mt-1'/>Leave Calendar</span>
           </li>
         </Link>
         <Link to="/home/generate-slip">
