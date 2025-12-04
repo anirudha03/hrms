@@ -115,7 +115,7 @@ const GetSlip = () => {
             <td></td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Gross Salary:</td>
+            <td className="px-4 py-2">CTC:</td>
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.totearn}</td>
             <td className="px-4 py-2">Total Deductions:</td>
             <td className="px-4 py-1 rounded-lg border border-gray-300">{slip.totded}</td>
